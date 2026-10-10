@@ -1,0 +1,24 @@
+# --- 建置產物與套件 ---
+node_modules/
+dist/
+.astro/
+.DS_Store
+Thumbs.db
+*.log
+
+# --- 私人資料：絕對不能進 repo ---
+證明文件/
+推薦信/
+*.odt
+*個人資料表*
+*基本資料表*
+*報名*
+*成績單*
+*在學證明*
+*證件照*
+*IELTS*
+*TOEIC*
+# 原始申請文件（網站只用整理過的 content/*.json 與 src/assets/img/）
+*.pptx
+*.docx
+*.doc
