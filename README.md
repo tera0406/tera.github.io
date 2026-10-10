@@ -2,9 +2,9 @@
 
 中英雙語的個人學術網站，用 [Astro](https://astro.build/) 建置，透過 GitHub Actions 自動部署到 GitHub Pages。
 
-- 英文版：<https://tera0406.github.io/resume/en/>
-- 中文版：<https://tera0406.github.io/resume/zh/>
-- 根網址 <https://tera0406.github.io/resume/> 會依「上次選的語言」或「瀏覽器語言」自動轉到對應版本。
+- 英文版：<https://tera0406.github.io/en/>
+- 中文版：<https://tera0406.github.io/zh/>
+- 根網址 <https://tera0406.github.io/> 會依「上次選的語言」或「瀏覽器語言」自動轉到對應版本。
 
 ---
 
@@ -17,7 +17,7 @@ npm install        # 第一次才需要，安裝套件
 npm run dev        # 啟動預覽伺服器
 ```
 
-打開終端機顯示的網址（通常是 <http://localhost:4321/resume/>）。改了檔案存檔後，瀏覽器會自動更新。
+打開終端機顯示的網址（通常是 <http://localhost:4321/>）。改了檔案存檔後，瀏覽器會自動更新。
 
 要看「正式部署後」的樣子：
 
@@ -95,7 +95,7 @@ git push origin main
 | `src/components/Video.astro` | YouTube 延遲載入：點了才從 youtube-nocookie.com 載入 |
 | `src/pages/index.astro` | 根網址的語言自動轉址 |
 | `public/og-zh.png`、`public/og-en.png` | 分享到社群時的預覽圖（1200×630） |
-| `astro.config.mjs` | 網址設定。如果之後改用 `tera0406.github.io` 這個 repo，把 `base` 改成 `'/'` |
+| `astro.config.mjs` | 網址設定。repo 名稱必須是 `tera0406.github.io`；如果改用其他 repo 名稱，要把 `base` 改成 `'/repo名稱'` |
 
 ## 5. 隱私
 

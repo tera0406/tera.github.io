@@ -29,7 +29,7 @@ const links = [
 
   <header class="topbar">
     <div class="wrap">
-      <a class="brand" href="#top">{c.meta.name}</a>
+      <a class="brand" href="#main">{c.meta.name}</a>
       <nav class="nav" aria-label={lang === 'zh' ? '頁面區塊' : 'Sections'}>
         <ul>{sections.map((s) => <li><a href={`#${s}`}>{ui.nav[s]}</a></li>)}</ul>
       </nav>
@@ -44,39 +44,36 @@ const links = [
   </header>
 
   <main id="main" tabindex="-1">
-    <!-- ===== 標題欄＋簡介 ===== -->
-    <div class="sheet" id="top">
-      <div class="wrap" id="about">
-        <div class="titleblock">
-          <div class="photo">
-            <Image src={img(c.meta.photo.file)} alt={c.meta.photo.alt} widths={[224, 400]} sizes="(max-width: 760px) 112px, 200px" loading="eager" fetchpriority="high" />
-          </div>
-          <div class="tb-name"><h1>{c.meta.name}</h1><span class="alt" lang={lang === 'en' ? 'zh-Hant-TW' : 'en'}>{c.meta.nameAlt}</span></div>
-          <div class="tb-row">
-            <div><span class="k">{ui.tb.institution}</span><span class="v">{c.hero.institution}</span></div>
-            <div><span class="k">{ui.tb.department}</span><span class="v">{c.hero.department}</span></div>
-            <div><span class="k">{ui.tb.standing}</span><span class="v">{c.hero.standing}</span></div>
-          </div>
-          <div class="tb-row2">
-            <div><span class="k">{ui.tb.interests}</span><span class="v">{c.hero.interests.join(lang === 'zh' ? '、' : ' · ')}</span></div>
-            <div><span class="k">{ui.tb.next}</span><span class="v">{c.hero.next}</span></div>
-          </div>
-        </div>
-        <div class="bio">
-          <p>{c.hero.summary}</p>
+    <!-- ===== 簡介 ===== -->
+    <div class="wrap">
+      <section class="hero" id="about" aria-labelledby="h-name">
+        <div class="hero-text">
+          <h1 id="h-name">{c.meta.name}</h1>
+          <p class="alt" lang={lang === 'en' ? 'zh-Hant-TW' : 'en'}>{c.meta.nameAlt}</p>
+          <p class="affil">{lang === 'zh'
+            ? `${c.hero.institution} ${c.hero.department}・${c.hero.standing}`
+            : `${c.hero.standing}, ${c.hero.department}, ${c.hero.institution}`}</p>
+          <p class="bio">{c.hero.summary}</p>
+          <p class="interests-line"><span class="k">{ui.tb.interests}</span>
+            <span class="interests">{c.hero.interests.map((i) => <span>{i}</span>)}</span>
+          </p>
+          <p class="next"><span class="k">{ui.tb.next}</span> {c.hero.next}</p>
           <p class="links">
-            {links.map(([label, href, printText], i) => <>{i > 0 && <span aria-hidden="true">{lang === 'zh' ? ' ／ ' : ' / '}</span>}<a href={href} data-print={printText} rel={href.startsWith('mailto') ? undefined : 'me noopener'}>{label}</a></>)}
+            {links.map(([label, href, printText]) => <a href={href} data-print={printText} rel={href.startsWith('mailto') ? undefined : 'me noopener'}>{label}</a>)}
           </p>
         </div>
-      </div>
+        <div class="hero-photo">
+          <Image src={img(c.meta.photo.file)} alt={c.meta.photo.alt} widths={[240, 480]} sizes="(max-width: 760px) 160px, 240px" loading="eager" fetchpriority="high" />
+        </div>
+      </section>
     </div>
 
     <div class="wrap">
       <!-- ===== 著作 ===== -->
       <section class="section" id="publications" aria-labelledby="h-pubs">
-        <div class="section-head"><h2 id="h-pubs">{ui.sections.publications}</h2><span class="no num" aria-hidden="true">01</span></div>
+        <div class="section-head"><h2 id="h-pubs">{ui.sections.publications}</h2></div>
         <table class="pubs">
-          <thead><tr><th class="k y">{ui.labels.year}</th><th class="k">{ui.labels.title}</th><th class="k s">{ui.labels.status}</th></tr></thead>
+          <thead class="visually-hidden"><tr><th class="k y">{ui.labels.year}</th><th class="k">{ui.labels.title}</th><th class="k s">{ui.labels.status}</th></tr></thead>
           <tbody>
             {c.publications.map((p) => (
               <tr>
@@ -104,15 +101,15 @@ const links = [
 
       <!-- ===== 研究與專案 ===== -->
       <section class="section" id="research" aria-labelledby="h-research">
-        <div class="section-head"><h2 id="h-research">{ui.sections.research}</h2><span class="no num" aria-hidden="true">02</span></div>
-        {c.research.map((r, idx) => (
+        <div class="section-head"><h2 id="h-research">{ui.sections.research}</h2></div>
+        {c.research.map((r) => (
           <article class="project" id={r.id} aria-labelledby={`t-${r.id}`}>
             <div class="proj-grid">
               <div class="thumb">
                 <Image src={img(r.thumb)} alt={r.thumbAlt} widths={[320, 640]} sizes="(max-width: 700px) 100vw, 300px" loading="lazy" />
               </div>
               <div class="proj-text">
-                <span class="cat num">{[`02.${idx + 1}`, r.category, r.period].filter(Boolean).join(SEP)}</span>
+                <span class="cat num">{[r.category, r.period].filter(Boolean).join(SEP)}</span>
                 <h3 id={`t-${r.id}`}>{r.title}</h3>
                 <p class="org">{r.org}{r.advisor && <>{SEP}{ui.labels.advisor}{COLON}{r.advisor}</>}</p>
                 <p>{r.summary}</p>
@@ -136,11 +133,11 @@ const links = [
                 </div>
                 {r.images?.length > 0 && (
                   <div class="figs">
-                    {r.images.map((im, k) => (
+                    {r.images.map((im) => (
                       <figure class:list={{ wide: im.wide }}>
                         <Image src={img(im.file)} alt={im.alt} widths={im.wide ? [560, 1040] : [280, 560]}
                                sizes={im.wide ? '(max-width: 860px) 100vw, 520px' : '(max-width: 860px) 50vw, 250px'} loading="lazy" />
-                        <figcaption><span class="num">{ui.labels.figure} {idx + 1}.{k + 1}</span>{lang === 'zh' ? '　' : '  '}{im.caption}</figcaption>
+                        <figcaption>{im.caption}</figcaption>
                       </figure>
                     ))}
                   </div>
@@ -154,7 +151,7 @@ const links = [
 
       <!-- ===== 影片 ===== -->
       <section class="section" id="videos" aria-labelledby="h-videos">
-        <div class="section-head"><h2 id="h-videos">{ui.sections.videos}</h2><span class="no num" aria-hidden="true">03</span></div>
+        <div class="section-head"><h2 id="h-videos">{ui.sections.videos}</h2></div>
         <div class="videos">
           {c.videos.map((v) => (
             <figure class="video" id={`video-${v.youtubeId}`}>
@@ -172,7 +169,7 @@ const links = [
 
       <!-- ===== 獲獎與計畫 ===== -->
       <section class="section" id="awards" aria-labelledby="h-awards">
-        <div class="section-head"><h2 id="h-awards">{ui.sections.awards}</h2><span class="no num" aria-hidden="true">04</span></div>
+        <div class="section-head"><h2 id="h-awards">{ui.sections.awards}</h2></div>
         <div class="ledger">
           {c.awards.map((a) => (
             <div>
@@ -185,7 +182,7 @@ const links = [
 
       <!-- ===== 其他 ===== -->
       <section class="section" id="activities" aria-labelledby="h-acts">
-        <div class="section-head"><h2 id="h-acts">{ui.sections.activities}</h2><span class="no num" aria-hidden="true">05</span></div>
+        <div class="section-head"><h2 id="h-acts">{ui.sections.activities}</h2></div>
         <div class="acts">
           {c.activities.map((a) => (
             <article class="act">

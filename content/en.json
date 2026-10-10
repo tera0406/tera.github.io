@@ -15,7 +15,7 @@
       "Robot manipulation",
       "Robot control",
       "System identification (system ID)",
-      "Sim-to-real: transferring policies learned in simulation reliably to physical robots",
+      "Sim-to-real",
       "Combining learning-based policies with control, including vision-language-action (VLA) models",
       "Mechatronic integration"
     ],
