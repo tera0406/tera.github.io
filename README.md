@@ -95,7 +95,7 @@ git push origin main
 | `src/components/Video.astro` | YouTube 延遲載入：點了才從 youtube-nocookie.com 載入 |
 | `src/pages/index.astro` | 根網址的語言自動轉址 |
 | `public/og-zh.png`、`public/og-en.png` | 分享到社群時的預覽圖（1200×630） |
-| `astro.config.mjs` | 網址設定。repo 名稱必須是 `tera0406.github.io`；如果改用其他 repo 名稱，要把 `base` 改成 `'/repo名稱'` |
+| `astro.config.mjs` | 網址設定。會依 repo 名稱自動決定：名稱是 `tera0406.github.io` 時網址是 `https://tera0406.github.io/`；其他名稱則是 `https://tera0406.github.io/名稱/`。不用手動修改 |
 
 ## 5. 隱私
 
