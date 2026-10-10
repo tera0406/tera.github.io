@@ -11,8 +11,6 @@
     }
   },
   "hero": {
-    "tagline": "機械系學生，關注機器人操作，以及如何讓模擬中學到的策略在真機上穩定運作。",
-    "affiliation": "國立中山大學 機械與機電工程學系 四年級",
     "interests": [
       "機器人操作（Manipulation）",
       "機器人控制",
@@ -26,23 +24,6 @@
     "department": "機械與機電工程學系",
     "standing": "大學部四年級",
     "next": "新加坡南洋理工大學（NTU）・2027 年 1–5 月"
-  },
-  "education": [
-    {
-      "school": "國立中山大學",
-      "dept": "機械與機電工程學系",
-      "degree": "學士（就讀中，四年級）",
-      "details": [
-        "114 學年度學士論文：〈結合多模態交叉融合與備援式 AI 決策機制之智慧分類垃圾桶研製〉，指導老師：楊政融"
-      ]
-    }
-  ],
-  "exchange": {
-    "school": "新加坡南洋理工大學（NTU）",
-    "type": "交換學生",
-    "period": "2027 年 1–5 月",
-    "plan": "修讀智慧製造與機器人相關課程",
-    "status": "預計"
   },
   "research": [
     {
@@ -58,7 +39,7 @@
         "模態丟失訓練",
         "證據深度學習",
         "多模態融合",
-        "雲邊協同",
+        "雲地協作",
         "機電整合"
       ],
       "summary": "只靠影像，很難分辨外觀相近、材質不同的垃圾（例如白色的塑膠碗和紙碗）。我們加裝麥克風，把影像和撞擊聲一起判斷，自動分成紙類、金屬、塑膠、一般垃圾四類；模型證據不足時，再把影像交給雲端視覺語言模型（Gemini）複核。",
@@ -103,67 +84,88 @@
         "youtubeId": "WwIwlDuYwN4"
       },
       "brief": "專題組長；負責機電整合與 PC、樹莓派、ESP32 之間的通訊，參與資料蒐集、模型訓練與實驗。機構與核心 AI 模型由組員負責。",
-      "thumb": "s05_Img_mech.jpg"
+      "thumb": "s05_Img_mech.jpg",
+      "thumbAlt": "垃圾桶內部實機照片，標示 Pi Camera、紅外線感測器、伺服馬達與麥克風的位置，中央為黑色圓盤分選雲台"
     },
     {
       "id": "openarm-bimanual",
       "category": "研究實習",
-      "title": "OpenArm 雙臂模仿學習（雙手交接）",
-      "org": "UROP 研究實習・City Science Lab @ Taipei Tech（國立臺北科技大學）",
-      "role": "研究實習生（Undergraduate Research Opportunity Program）",
+      "title": "OpenArm 雙臂物品交接：Real2Sim2Real 模仿學習",
+      "org": "UROP 暑期研究實習・City Science Lab @ Taipei Tech（國立臺北科技大學）",
+      "role": "研究實習生（三人團隊）",
       "period": "2026 年 7–8 月",
       "tags": [
-        "MuJoCo",
-        "System ID",
         "Isaac Sim",
         "Isaac Lab Mimic",
+        "VR 遙操作",
+        "Domain randomization",
         "LeRobot",
         "SmolVLA",
-        "VR 遙操作"
+        "Sim-to-real",
+        "MuJoCo"
       ],
-      "summary": "在 CSL 的兩個月，先在 MuJoCo 裡學機械手臂的基礎：工作空間、動力學和阻抗力矩補償，再到實體手臂上嘗試 system ID，接著投入 OpenArm 雙臂交接物品的任務。",
-      "contributions": [
-        "考量時間和成本，我選擇用資料擴增完成雙手交接任務：在 Isaac Sim 裡用 VR 遙操作錄約 20 筆人類示範，用 Isaac Lab Mimic 擴增成上千筆訓練資料，再微調 SmolVLA。",
-        "完整流程：任務設置 → VR 遙操作（Isaac Sim）→ 資料擴增（Isaac Lab Mimic）→ 模型訓練（LeRobot・SmolVLA）→ 模擬評估（Isaac Sim）→ 真機評估。",
-        "除錯：擴增出來的資料一開始一直不對，後來參考 Isaac Lab Mimic 官方的雙手交接範例，重新設定子任務的標註斷點（示範時一次只動一隻手，子任務之間才切得出斷點），也修好了模擬中手指碰撞失效的狀況。"
-      ],
+      "summary": "在 OpenArm 雙臂系統上完成品客罐的雙手交接任務。我們在 Isaac Sim 中以 VR 遙操作錄製示範，用 Isaac Lab Mimic 擴增資料，微調 SmolVLA，並在模擬與真機上評估、分析 sim-to-real 差距。",
       "results": [
-        "約 20 筆示範擴增成上千筆訓練資料。",
-        "微調後的 SmolVLA 部署到真機，並做真機評估。"
+        "Isaac Sim 中成功率約 60%，失敗主要發生在交接步驟。",
+        "加入影像隨機化（亮度、飽和度等）後，成功率提升約 20%。",
+        "真機以三台相機評估，有成功完成的案例，也有在交接階段失敗的案例。"
       ],
-      "reflection": "這兩個月實際從模擬做到真機（sim-to-real），也讓我在機器人學習這個方向上有更深入的瞭解。",
+      "reflection": "這兩個月實際從模擬做到真機（sim-to-real），也讓我在機器人學習這個方向上有更深入的了解。",
       "images": [
         {
-          "file": "s04_Img_s2_Step_1_image.jpg",
-          "alt": "任務設置：實體 OpenArm 雙臂與桌上的待交接物品",
-          "caption": "1. 任務設置（真實環境）"
+          "file": "urop_annotation.jpg",
+          "caption": "資料標註：右手交接階段（Isaac Sim）",
+          "alt": "Isaac Sim 俯視畫面：白色桌面上的品客罐，右手機械臂伸向罐子準備交接",
+          "wide": true
         },
         {
-          "file": "s04_Img_s2_Step_2_image.jpg",
-          "alt": "VR 遙操作：Isaac Sim 畫面中以 VR 控制雙臂機器人錄製示範",
-          "caption": "2. VR 遙操作（Isaac Sim）"
+          "file": "urop_domain_rand.jpg",
+          "caption": "Domain randomization 範例（左上為原始影像）",
+          "alt": "六張同一場景的模擬影像，分別套用不同的亮度、色彩與仿射變換",
+          "wide": true
         },
         {
-          "file": "s04_Img_s2_Step_3_image.jpg",
-          "alt": "資料擴增：Isaac Lab Mimic 中並排的多個雙臂機器人模擬環境",
-          "caption": "3. 資料擴增（Isaac Lab Mimic）"
+          "file": "urop_sim_eval.jpg",
+          "caption": "Isaac Sim 評估",
+          "alt": "Isaac Sim 中 OpenArm 雙臂與品客罐的正面視角"
         },
         {
-          "file": "s04_Img_s2_Step_5_image.jpg",
-          "alt": "模擬評估：Isaac Sim 中雙臂機器人在白色檯面上交接物品",
-          "caption": "4. 模擬評估（Isaac Sim）"
+          "file": "urop_real_eval.jpg",
+          "caption": "真機評估",
+          "alt": "實驗室中的 OpenArm 雙臂與桌上的品客罐，旁邊有螢幕顯示執行畫面"
         },
         {
-          "file": "s04_Img_s2_Step_6_image.jpg",
-          "alt": "真機評估：實體機械手臂夾持一個紅色圓柱形物品",
-          "caption": "5. 真機評估"
+          "file": "urop_sim2real_gap.jpg",
+          "caption": "Sim-to-real 差距分析：模擬與真機畫面並排比對",
+          "alt": "電腦畫面同時顯示 Isaac Sim 的雙臂模擬與三台實體相機的影像",
+          "wide": true
         }
       ],
       "video": {
         "youtubeId": "BDO_n6OTzGI"
       },
-      "brief": "UROP 研究實習生。",
-      "thumb": "s04_Img_s2_Step_6_image.jpg"
+      "brief": "三人團隊成員（暑期 UROP 研究實習）。實習前段，我另外在 MuJoCo 學習機械手臂的工作空間、動力學與阻抗力矩補償，並在實體手臂上嘗試 system ID。",
+      "thumb": "urop_thumb.jpg",
+      "method": [
+        "遙操作錄製示範：在 Isaac Sim 中以 VR（Meta Quest Pro）與鍵盤操作雙臂錄製示範。",
+        "資料標註：把示範切成子任務。右手為「伸手→抓取」與「交接→放開→返回」，左手為「等待→交接→返回」。",
+        "資料生成：以 Isaac Lab Mimic 將 10 筆人工 VR 示範擴增為 500 筆合成資料。",
+        "Domain randomization：在 Isaac Lab 中對影像做亮度、對比、飽和度、色相、銳利度與仿射變換的隨機化。",
+        "模型訓練：以 LeRobot 微調 SmolVLA。",
+        "Sim-to-real 差距分析：把 Isaac Sim 中的預測動作送到真機執行，比對模擬與真實環境的差異。"
+      ],
+      "challenges": [
+        "已解決的 sim-to-real 差距：相機位置與角度、品客罐尺寸與外觀、機器人初始位置（影響最大）。",
+        "尚未解決的差距：光影、環境（桌面、背景等）、真實的相機碰撞模型。",
+        "擴增資料一開始不正確；參考 Isaac Lab Mimic 官方的雙手交接範例後，重新設定子任務的標註斷點（示範時一次只動一隻手，子任務之間才切得出斷點），並修正模擬中手指碰撞失效的問題。"
+      ],
+      "next": [
+        "找出重複執行時成功率下降的原因。",
+        "以更廣的環境隨機化提升成功率。",
+        "改用靈巧手處理更複雜的抓取。",
+        "延伸到移動底盤的雙臂系統。"
+      ],
+      "thumbAlt": "實驗室中的 OpenArm 雙臂與桌上的品客罐，旁邊有螢幕顯示執行畫面"
     },
     {
       "id": "tel-robot-combat",
@@ -251,7 +253,8 @@
         "youtubeId": "T3OZJ4vV-2I"
       },
       "brief": "隊長；負責硬體架構與全機機構設計（底盤、送球、搭橋與發射模組），軟體與 AI 由隊友負責。",
-      "thumb": "s06_Img_mod_full.jpg"
+      "thumb": "s06_Img_mod_full.jpg",
+      "thumbAlt": "射球機器人全車組裝的 CAD 模型，鋁擠型車架、三層結構與麥克納姆輪"
     },
     {
       "id": "robot-navigation-course",
@@ -295,7 +298,8 @@
         }
       ],
       "brief": "修課實作。",
-      "thumb": "s08_Img_s5_Image_0.jpg"
+      "thumb": "s08_Img_s5_Image_0.jpg",
+      "thumbAlt": "RRT* 演算法實作：黑色六角形障礙物地圖上的取樣樹與規劃路徑"
     }
   ],
   "publications": [
@@ -307,9 +311,8 @@
       "status": "審查中",
       "date": "2026 年 9 月 20 日投稿",
       "abstract": "現有垃圾分類方法多只依賴單張影像，難以分辨外觀相似但材質不同的物品；既有的影像與撞擊聲融合研究，則假設兩種模態在訓練與評估時都一定存在。本文的智慧分類垃圾桶以雙向交叉注意力融合影像與聲音特徵，以模態丟失訓練讓聲音失效時仍能辨識，並以證據式輸出層提供的不確定度，決定樣本由邊緣端判定或轉交雲端視覺語言模型。系統部署在具紅外線分選後確認迴路的二自由度雲台上，經 1,305 次實體投放驗證：融合模型準確率 98.48%（純視覺基線 92.89%），聲音完全遮蔽時仍有 96.45%（未經模態丟失訓練為 89.34%）；以獨立驗證集校準轉交門檻後，串接系統達 99.49%，高於僅邊緣端與僅雲端兩種配置。",
-      "abstractEn": "Existing waste classification methods rely on a single visual image and cannot reliably separate objects that look alike but differ in material. Recent work fuses vision with impact sound, but trains and evaluates under the assumption that both modalities are always available. Thin, lightweight waste carries too little impact energy to produce a recognizable acoustic signature, and such models also lack any mechanism for recognizing when their own evidence is insufficient. We present a smart waste-sorting bin built on a modality-robust confidence-gated cascade. Bidirectional cross-attention fuses visual and acoustic features with weights learned end to end; modality dropout training randomly disables the auditory input so that the model remains discriminative when one modality fails; and an evidential output layer supplies an uncertainty value that gates whether a sample is decided at the edge or deferred to a cloud vision-language model. The system was deployed on a two-degree-of-freedom pan-tilt mechanism with an infrared post-sorting verification loop and validated over 1,305 physical drops. On a purpose-built dataset of paired images and impact sounds, fusion reached 98.48% accuracy against 92.89% for a vision-only baseline, and retained 96.45% when the auditory input was fully masked, against 89.34% without modality dropout training. With the deferral threshold calibrated on a held-out validation set, the cascade reached 99.49%, above both the edge-only and cloud-only configurations. These results show that a model’s own confidence can allocate inference resources effectively in multimodal recognition under incomplete sensing.",
-      "relatedProject": "smart-bin",
-      "fulltext": false
+      "year": "2026",
+      "statusKind": "review"
     },
     {
       "id": "csmmt-2026",
@@ -319,18 +322,19 @@
       "venue": "第 29 屆全國機構與機器設計學術研討會（CSMMT 2026），國立臺灣科技大學，論文編號 22",
       "status": "小修後接受",
       "date": "研討會：2026 年 11 月 6–7 日",
-      "abstract": "本研究實作一套具雲地協作機制的 AIoT 智慧分類垃圾桶，處理「同色異質物體難以辨識」與「邊緣模型過度自信造成高分誤判」兩個問題。辨識上以影像與撞擊聲（梅爾頻譜）的交叉注意力融合，並加入模態丟失訓練，因應輕薄垃圾落下時沒有聲音的情況；決策上以證據深度學習量化認知不確定性，超過在驗證集校準的門檻時，交由雲端視覺語言模型（Gemini）備援推理；實體分選則由具防卡料排障功能的二自由度雲台執行。以 1,305 組影像與撞擊聲配對資料實機驗證，融合模型的測試集準確率由純視覺的 92.89% 提升至 98.48%，聲音輸入遮蔽時仍有 96.45%，雲地串接後達 99.49%，高於僅地端與僅雲端配置。",
-      "relatedProject": "smart-bin",
-      "fulltext": false
+      "abstract": "本研究實作一套具雲地協作機制的 AIoT 智慧分類垃圾桶，處理「同色異質物體難以辨識」與「邊緣模型過度自信造成高分誤判」兩個問題。辨識上以影像與撞擊聲（梅爾頻譜）的交叉注意力融合，並加入模態丟失訓練，因應輕薄垃圾落下時沒有聲音的情況；決策上以證據深度學習量化認知不確定度，超過在驗證集校準的門檻時，交由雲端視覺語言模型（Gemini）備援推理；實體分選則由具防卡料排障功能的二自由度雲台執行。以 1,305 組影像與撞擊聲配對資料實機驗證，融合模型的測試集準確率由純視覺的 92.89% 提升至 98.48%，聲音輸入遮蔽時仍有 96.45%，雲地協作後達 99.49%，高於僅邊緣端與僅雲端配置。",
+      "year": "2026",
+      "statusKind": "ok"
     },
     {
       "id": "bachelor-thesis-114",
       "type": "學士論文",
       "title": "結合多模態交叉融合與備援式 AI 決策機制之智慧分類垃圾桶研製",
       "venue": "國立中山大學 機械與機電工程學系",
-      "abstract": "本研究製作一套具動態容錯與雲地協作機制的 AIoT 智慧分類垃圾桶。硬體上以雙自由度隱藏式雲台搭配中心凹陷的導流平台，把儲存空間分成四個區域，並以大角度傾斜與高頻震動排除卡料；演算法上以交叉注意力融合影像與梅爾頻率倒頻譜係數聲音特徵，並以模態丟失訓練處理輕薄垃圾落下沒有聲音的情況。決策上以證據深度學習量化認知不確定性，超過門檻時呼叫雲端視覺語言模型 Gemini 備援推理。經實體機構驗證與準確率–速度權衡曲線調校，整體分類準確率由單一模態的 85% 提升並穩定在 93% 以上。",
-      "relatedProject": "smart-bin",
-      "fulltext": false
+      "abstract": "本研究製作一套具動態容錯與雲地協作機制的 AIoT 智慧分類垃圾桶。硬體上以雙自由度隱藏式雲台搭配中心凹陷的導流平台，把儲存空間分成四個區域，並以大角度傾斜與高頻震動排除卡料；演算法上以交叉注意力融合影像與梅爾頻率倒頻譜係數聲音特徵，並以模態丟失訓練處理輕薄垃圾落下沒有聲音的情況。決策上以證據深度學習量化認知不確定度，超過門檻時呼叫雲端視覺語言模型 Gemini 備援推理。經實體機構驗證與準確率–速度權衡曲線調校，整體分類準確率由單一模態的 85% 提升並穩定在 93% 以上。",
+      "year": "114 學年度",
+      "statusKind": "plain",
+      "note": "學士論文為本研究較早階段的版本；後續結果見上方兩篇論文。"
     }
   ],
   "awards": [
@@ -417,7 +421,6 @@
   "ui": {
     "skip": "跳到主要內容",
     "switchTo": "English",
-    "switchLabel": "切換為英文版",
     "theme": "切換深色／淺色模式",
     "print": "列印履歷",
     "nav": {
@@ -433,16 +436,9 @@
       "department": "系所",
       "standing": "年級",
       "interests": "研究興趣",
-      "next": "交換計畫",
-      "sheet": "頁",
-      "drawing": "圖號"
+      "next": "交換計畫"
     },
     "labels": {
-      "education": "學歷",
-      "exchange": "交換",
-      "role": "角色",
-      "period": "期間",
-      "org": "單位",
       "advisor": "指導老師",
       "method": "研究方法",
       "system": "系統架構",
@@ -452,21 +448,18 @@
       "challenges": "遇到的問題",
       "results": "結果",
       "reflection": "心得",
-      "abstract": "摘要",
       "showAbstract": "摘要",
       "status": "狀態",
       "year": "年份",
-      "venue": "發表處",
       "title": "題目",
-      "watch": "觀看影片",
       "playVideo": "播放影片",
-      "openYoutube": "在 YouTube 開啟",
       "abstractOnly": "目前僅提供摘要",
       "figure": "圖",
       "link": "作品頁",
       "more": "詳細內容與圖片",
       "myRole": "我的角色",
-      "video": "影片"
+      "video": "影片",
+      "next": "後續方向"
     },
     "sections": {
       "about": "簡介",
@@ -474,9 +467,7 @@
       "publications": "著作",
       "awards": "獲獎與計畫",
       "videos": "影片",
-      "skills": "技能",
-      "activities": "其他作品與活動",
-      "contact": "聯絡方式"
+      "activities": "其他作品與活動"
     },
     "contact": {
       "email": "Email",
@@ -485,7 +476,8 @@
       "makerworld": "MakerWorld"
     },
     "updated": "最後更新",
-    "videoConsent": "點擊後才會從 YouTube（youtube-nocookie.com）載入影片。"
+    "videoConsent": "點選後才會從 YouTube（youtube-nocookie.com）載入影片。",
+    "switchLabel": "切換為英文版"
   },
   "updated": "2026-10"
 }

@@ -8,8 +8,13 @@ const site = Astro.site!.toString().replace(/\/$/, '');
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const canonical = site + pageUrl(lang);
 const ogImage = `${site}${base}/og-${lang}.png`;
-const fonts =
-  'https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap';
+// 字型：英文 Source Serif 4；中文 Noto Serif TC。
+// 英文頁只需要姓名和「中文」按鈕的幾個字，用 text= 參數只下載這些字，減少載入量。
+const latin = 'https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap';
+const cjk = lang === 'zh'
+  ? 'https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap'
+  : `https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400&display=swap&text=${encodeURIComponent('姜兆源中文')}`;
+const hreflang: Record<Lang, string> = { zh: 'zh-TW', en: 'en' };
 
 const person = {
   '@context': 'https://schema.org',
@@ -30,7 +35,7 @@ const person = {
   <title>{c.meta.title}</title>
   <meta name="description" content={c.meta.description} />
   <link rel="canonical" href={canonical} />
-  {LANGS.map((l) => <link rel="alternate" hreflang={htmlLang[l]} href={site + pageUrl(l)} />)}
+  {LANGS.map((l) => <link rel="alternate" hreflang={hreflang[l]} href={site + pageUrl(l)} />)}
   <link rel="alternate" hreflang="x-default" href={`${site}${base}/`} />
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" content="#f9fafb" media="(prefers-color-scheme: light)" />
@@ -46,20 +51,20 @@ const person = {
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content={c.meta.title} />
   <meta property="og:locale" content={ogLocale[lang]} />
+  {LANGS.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="style" href={fonts} />
-  <link rel="stylesheet" href={fonts} media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href={fonts} /></noscript>
+  {[latin, cjk].map((href) => <>
+    <link rel="preload" as="style" href={href} />
+    <link rel="stylesheet" href={href} media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href={href} /></noscript>
+  </>)}
 
   <script is:inline>
     // 深色模式：記住使用者選擇；沒選過就跟隨系統。
     try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
-  </script>
-  <script is:inline define:vars={{ lang }}>
-    try { localStorage.setItem('lang', lang); } catch (e) {}
   </script>
   <script type="application/ld+json" set:html={JSON.stringify(person)} />
 </head>

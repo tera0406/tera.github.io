@@ -15,14 +15,13 @@ const other: Lang = lang === 'zh' ? 'en' : 'zh';
 const SEP = lang === 'zh' ? '・' : ' · ';
 const COLON = lang === 'zh' ? '：' : ': ';
 const sections = ['about', 'publications', 'research', 'videos', 'awards', 'activities'] as const;
-const statusClass = (id: string) => (id.startsWith('ieee') ? 'review' : id.startsWith('csmmt') ? 'ok' : 'plain');
-const pubYear = (id: string) => (id.includes('thesis') ? (lang === 'zh' ? '114 學年度' : '2025–26') : '2026');
 const projectById = Object.fromEntries(c.research.map((r) => [r.id, r]));
+// [顯示文字, 連結, 列印時顯示的網址]
 const links = [
-  [ui.contact.email, `mailto:${c.contact.email}`],
-  [ui.contact.linkedin, c.contact.linkedin],
-  [ui.contact.github, c.contact.github],
-  [ui.contact.makerworld, c.contact.makerworld],
+  [ui.contact.email, `mailto:${c.contact.email}`, c.contact.email],
+  [ui.contact.linkedin, c.contact.linkedin, 'linkedin.com/in/…243b0a317'],
+  [ui.contact.github, c.contact.github, 'github.com/tera0406'],
+  [ui.contact.makerworld, c.contact.makerworld, 'makerworld.com/@cdtera2446890'],
 ] as const;
 ---
 <Base lang={lang} c={c}>
@@ -35,16 +34,16 @@ const links = [
         <ul>{sections.map((s) => <li><a href={`#${s}`}>{ui.nav[s]}</a></li>)}</ul>
       </nav>
       <div class="tools">
-        <a class="btn" href={pageUrl(other)} hreflang={other === 'zh' ? 'zh-Hant-TW' : 'en'} lang={other === 'zh' ? 'zh-Hant-TW' : 'en'}
-           aria-label={ui.switchLabel} data-lang-switch={other}>{ui.switchTo}</a>
-        <button class="btn" type="button" data-theme-toggle aria-label={ui.theme} title={ui.theme}>
+        <a class="btn" href={pageUrl(other)} hreflang={other === 'zh' ? 'zh-TW' : 'en'} lang={other === 'zh' ? 'zh-Hant-TW' : 'en'}
+           title={ui.switchLabel} data-lang-switch={other}>{ui.switchTo}</a>
+        <button class="btn" type="button" data-theme-toggle aria-pressed="false" aria-label={ui.theme} title={ui.theme}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" /></svg>
         </button>
       </div>
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" tabindex="-1">
     <!-- ===== 標題欄＋簡介 ===== -->
     <div class="sheet" id="top">
       <div class="wrap" id="about">
@@ -52,7 +51,7 @@ const links = [
           <div class="photo">
             <Image src={img(c.meta.photo.file)} alt={c.meta.photo.alt} widths={[224, 400]} sizes="(max-width: 760px) 112px, 200px" loading="eager" fetchpriority="high" />
           </div>
-          <div class="tb-name"><h1>{c.meta.name}</h1><span class="alt">{c.meta.nameAlt}</span></div>
+          <div class="tb-name"><h1>{c.meta.name}</h1><span class="alt" lang={lang === 'en' ? 'zh-Hant-TW' : 'en'}>{c.meta.nameAlt}</span></div>
           <div class="tb-row">
             <div><span class="k">{ui.tb.institution}</span><span class="v">{c.hero.institution}</span></div>
             <div><span class="k">{ui.tb.department}</span><span class="v">{c.hero.department}</span></div>
@@ -66,7 +65,7 @@ const links = [
         <div class="bio">
           <p>{c.hero.summary}</p>
           <p class="links">
-            {links.map(([label, href], i) => <>{i > 0 && <span aria-hidden="true"> ／ </span>}<a href={href} rel={href.startsWith('mailto') ? undefined : 'me noopener'}>{label}</a></>)}
+            {links.map(([label, href, printText], i) => <>{i > 0 && <span aria-hidden="true">{lang === 'zh' ? ' ／ ' : ' / '}</span>}<a href={href} data-print={printText} rel={href.startsWith('mailto') ? undefined : 'me noopener'}>{label}</a></>)}
           </p>
         </div>
       </div>
@@ -81,25 +80,26 @@ const links = [
           <tbody>
             {c.publications.map((p) => (
               <tr>
-                <td class="y num">{pubYear(p.id)}</td>
+                <td class="y num">{p.year}</td>
                 <td>
                   <span class="pub-title" lang={/[一-鿿]/.test(p.title) ? 'zh-Hant-TW' : 'en'}>{p.title}</span>
                   {p.titleEn && <span class="pub-title-alt" lang="en">{p.titleEn}</span>}
                   <span class="pub-venue">{p.type}{SEP}{p.venue}</span>
                   <details>
-                    <summary>{ui.labels.showAbstract}</summary>
+                    <summary>{ui.labels.showAbstract}<span class="visually-hidden">{COLON}{p.title}</span></summary>
                     <p>{p.abstract}</p>
                   </details>
+                  {p.note && <span class="note">{p.note}</span>}
                 </td>
                 <td class="s">
-                  {p.status && <span class:list={['chip', statusClass(p.id)]}>{p.status}</span>}
-                  <div class="note num">{p.date}</div>
+                  {p.status && <span class:list={['chip', p.statusKind]}>{p.status}</span>}
+                  {p.date && <div class="note num">{p.date}</div>}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <p class="note">{ui.labels.abstractOnly}</p>
+        <p class="note print-hide">{ui.labels.abstractOnly}</p>
       </section>
 
       <!-- ===== 研究與專案 ===== -->
@@ -109,7 +109,7 @@ const links = [
           <article class="project" id={r.id} aria-labelledby={`t-${r.id}`}>
             <div class="proj-grid">
               <div class="thumb">
-                <Image src={img(r.thumb)} alt={r.images?.find((i) => i.file === r.thumb)?.alt ?? ''} widths={[320, 640]} sizes="(max-width: 700px) 100vw, 300px" loading="lazy" />
+                <Image src={img(r.thumb)} alt={r.thumbAlt} widths={[320, 640]} sizes="(max-width: 700px) 100vw, 300px" loading="lazy" />
               </div>
               <div class="proj-text">
                 <span class="cat num">{[`02.${idx + 1}`, r.category, r.period].filter(Boolean).join(SEP)}</span>
@@ -117,11 +117,11 @@ const links = [
                 <p class="org">{r.org}{r.advisor && <>{SEP}{ui.labels.advisor}{COLON}{r.advisor}</>}</p>
                 <p>{r.summary}</p>
                 <p class="role"><strong>{ui.labels.myRole}{COLON}</strong>{r.brief}</p>
-                {r.video && <a class="btn watch" href={`#video-${r.video.youtubeId}`}>▶ {ui.labels.video}</a>}
+                {r.video && <a class="btn watch" href={`#video-${r.video.youtubeId}`}><span aria-hidden="true">▶</span> {ui.labels.video}<span class="visually-hidden">{COLON}{r.title}</span></a>}
               </div>
             </div>
             <details class="more">
-              <summary>{ui.labels.more}</summary>
+              <summary>{ui.labels.more}<span class="visually-hidden">{COLON}{r.title}</span></summary>
               <div class="more-body">
                 <div class="more-grid">
                   {r.method && <div><h4>{ui.labels.method}</h4><ul>{r.method.map((m) => <li>{m}</li>)}</ul></div>}
@@ -129,8 +129,9 @@ const links = [
                   {r.design && <div><h4>{ui.labels.design}</h4><ul>{r.design.map((m) => <li>{m}</li>)}</ul></div>}
                   {r.contributions?.length > 0 && <div><h4>{ui.labels.contributions}</h4><ul>{r.contributions.map((m) => <li>{m}</li>)}</ul></div>}
                   {r.team && <div><h4>{ui.labels.team}</h4><p>{r.team}</p></div>}
-                  {r.challenges && <div><h4>{ui.labels.challenges}</h4><ul>{r.challenges.map((m) => <li>{m}</li>)}</ul></div>}
                   {r.results?.length > 0 && <div><h4>{ui.labels.results}</h4><ul class="num">{r.results.map((m) => <li>{m}</li>)}</ul></div>}
+                  {r.challenges && <div><h4>{ui.labels.challenges}</h4><ul>{r.challenges.map((m) => <li>{m}</li>)}</ul></div>}
+                  {r.next && <div><h4>{ui.labels.next}</h4><ul>{r.next.map((m) => <li>{m}</li>)}</ul></div>}
                   {r.reflection && <div><h4>{ui.labels.reflection}</h4><p>{r.reflection}</p></div>}
                 </div>
                 {r.images?.length > 0 && (
@@ -157,7 +158,7 @@ const links = [
         <div class="videos">
           {c.videos.map((v) => (
             <figure class="video" id={`video-${v.youtubeId}`}>
-              <Video id={v.youtubeId} title={v.title} playLabel={ui.labels.playVideo} openLabel={ui.labels.openYoutube} />
+              <Video id={v.youtubeId} title={v.title} label={`${ui.labels.playVideo}${COLON}${v.title}`} />
               <figcaption>
                 <span class="t">{v.title}</span>
                 <span class="c">{v.caption}</span>
@@ -218,11 +219,18 @@ const links = [
       });
     });
     // 深色／淺色切換：記在 localStorage。
-    document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
+    const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+    const isDark = () => {
+      const t = document.documentElement.dataset.theme;
+      return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    };
+    const sync = () => toggle?.setAttribute('aria-pressed', String(isDark()));
+    sync();
+    toggle?.addEventListener('click', () => {
       const root = document.documentElement;
-      const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-      root.dataset.theme = dark ? 'light' : 'dark';
+      root.dataset.theme = isDark() ? 'light' : 'dark';
       try { localStorage.setItem('theme', root.dataset.theme); } catch {}
+      sync();
     });
     // 從影片連到專案時，自動展開該專案的詳細內容。
     const openTarget = () => {

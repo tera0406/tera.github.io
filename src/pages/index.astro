@@ -11,9 +11,8 @@ const site = Astro.site!.toString().replace(/\/$/, '');
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Chao-Yuan Chiang 姜兆源</title>
   <meta name="description" content="Personal academic website of Chao-Yuan (Tera) Chiang, National Sun Yat-sen University. 姜兆源的個人學術網站。" />
-  <link rel="canonical" href={`${site}${base}/en/`} />
   <link rel="alternate" hreflang="en" href={`${site}${base}/en/`} />
-  <link rel="alternate" hreflang="zh-Hant-TW" href={`${site}${base}/zh/`} />
+  <link rel="alternate" hreflang="zh-TW" href={`${site}${base}/zh/`} />
   <link rel="alternate" hreflang="x-default" href={`${site}${base}/`} />
   <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
   <script is:inline define:vars={{ base }}>
@@ -31,7 +30,7 @@ const site = Astro.site!.toString().replace(/\/$/, '');
 <body>
   <main class="wrap" style="padding:48px 16px">
     <h1>Chao-Yuan Chiang 姜兆源</h1>
-    <p><a href={`${base}/en/`} hreflang="en">English</a> ・ <a href={`${base}/zh/`} hreflang="zh-Hant-TW" lang="zh-Hant-TW">繁體中文</a></p>
+    <p><a href={`${base}/en/`} hreflang="en">English</a> ・ <a href={`${base}/zh/`} hreflang="zh-TW" lang="zh-Hant-TW">繁體中文</a></p>
   </main>
 </body>
 </html>

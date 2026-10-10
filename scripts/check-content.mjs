@@ -34,6 +34,7 @@ for (const [lang, c] of [['zh', zh], ['en', en]]) {
       if (typeof o[key] === 'string' && /\.(jpe?g|png|webp)$/i.test(o[key])) {
         if (!existsSync(join(root, 'src/assets/img', o[key]))) errors.push(`${lang}${path}.${key}：找不到圖片 ${o[key]}`);
         if (key === 'file' && !o.alt) errors.push(`${lang}${path}：圖片 ${o.file} 沒有 alt 替代文字`);
+        if (key === 'thumb' && !o.thumbAlt) errors.push(`${lang}${path}：代表圖 ${o.thumb} 沒有 thumbAlt 替代文字`);
       }
     }
     if (typeof o.youtubeId === 'string' && !/^[\w-]{11}$/.test(o.youtubeId)) errors.push(`${lang}${path}：YouTube ID 格式不對：${o.youtubeId}`);
