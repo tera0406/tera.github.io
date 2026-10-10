@@ -12,6 +12,8 @@ const lang = Astro.params.lang as Lang;
 const c = content[lang];
 const ui = c.ui;
 const other: Lang = lang === 'zh' ? 'en' : 'zh';
+const SEP = lang === 'zh' ? '・' : ' · ';
+const COLON = lang === 'zh' ? '：' : ': ';
 const sections = ['about', 'publications', 'research', 'videos', 'awards', 'activities'] as const;
 const statusClass = (id: string) => (id.startsWith('ieee') ? 'review' : id.startsWith('csmmt') ? 'ok' : 'plain');
 const pubYear = (id: string) => (id.includes('thesis') ? (lang === 'zh' ? '114 學年度' : '2025–26') : '2026');
@@ -83,7 +85,7 @@ const links = [
                 <td>
                   <span class="pub-title" lang={/[一-鿿]/.test(p.title) ? 'zh-Hant-TW' : 'en'}>{p.title}</span>
                   {p.titleEn && <span class="pub-title-alt" lang="en">{p.titleEn}</span>}
-                  <span class="pub-venue">{p.type}・{p.venue}</span>
+                  <span class="pub-venue">{p.type}{SEP}{p.venue}</span>
                   <details>
                     <summary>{ui.labels.showAbstract}</summary>
                     <p>{p.abstract}</p>
@@ -110,11 +112,11 @@ const links = [
                 <Image src={img(r.thumb)} alt={r.images?.find((i) => i.file === r.thumb)?.alt ?? ''} widths={[320, 640]} sizes="(max-width: 700px) 100vw, 300px" loading="lazy" />
               </div>
               <div class="proj-text">
-                <span class="cat num">{[`02.${idx + 1}`, r.category, r.period].filter(Boolean).join('・')}</span>
+                <span class="cat num">{[`02.${idx + 1}`, r.category, r.period].filter(Boolean).join(SEP)}</span>
                 <h3 id={`t-${r.id}`}>{r.title}</h3>
-                <p class="org">{r.org}{r.advisor && <>・{ui.labels.advisor}：{r.advisor}</>}</p>
+                <p class="org">{r.org}{r.advisor && <>{SEP}{ui.labels.advisor}{COLON}{r.advisor}</>}</p>
                 <p>{r.summary}</p>
-                <p class="role"><strong>{ui.labels.myRole}：</strong>{r.brief}</p>
+                <p class="role"><strong>{ui.labels.myRole}{COLON}</strong>{r.brief}</p>
                 {r.video && <a class="btn watch" href={`#video-${r.video.youtubeId}`}>▶ {ui.labels.video}</a>}
               </div>
             </div>
@@ -137,7 +139,7 @@ const links = [
                       <figure class:list={{ wide: im.wide }}>
                         <Image src={img(im.file)} alt={im.alt} widths={im.wide ? [560, 1040] : [280, 560]}
                                sizes={im.wide ? '(max-width: 860px) 100vw, 520px' : '(max-width: 860px) 50vw, 250px'} loading="lazy" />
-                        <figcaption><span class="num">{ui.labels.figure} {idx + 1}.{k + 1}</span>　{im.caption}</figcaption>
+                        <figcaption><span class="num">{ui.labels.figure} {idx + 1}.{k + 1}</span>{lang === 'zh' ? '　' : '  '}{im.caption}</figcaption>
                       </figure>
                     ))}
                   </div>
@@ -189,7 +191,7 @@ const links = [
               {a.images?.[0] && <Image src={img(a.images[0].file)} alt={a.images[0].alt} widths={[360, 720]} sizes="(max-width: 700px) 100vw, 360px" loading="lazy" />}
               <div class="body">
                 <h3>{a.title}</h3>
-                <div class="sub">{a.org}{a.role && `・${a.role}`}</div>
+                <div class="sub">{a.org}{a.role && `${SEP}${a.role}`}</div>
                 <p>{a.summary}</p>
                 {a.link && <a href={a.link} rel="noopener">{ui.labels.link} ↗</a>}
               </div>
@@ -202,7 +204,7 @@ const links = [
 
   <footer class="footer">
     <div class="wrap">
-      <span>© 2026 {c.meta.name}・{ui.updated} <span class="num">{c.updated}</span>・<a href={`mailto:${c.contact.email}`}>{c.contact.email}</a></span>
+      <span>© 2026 {c.meta.name}{SEP}{ui.updated} <span class="num">{c.updated}</span>{SEP}<a href={`mailto:${c.contact.email}`}>{c.contact.email}</a></span>
       <span class="tools"><button class="btn" type="button" onclick="window.print()">{ui.print}</button></span>
     </div>
   </footer>
