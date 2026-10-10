@@ -382,19 +382,19 @@
       "images": [
         {
           "file": "s09_Img_s7_maker.jpg",
-          "alt": "Screenshot of a MakerWorld profile page with models including a Poké Ball–style card box"
+          "alt": "Screenshot of a MakerWorld profile page showing several 3D-printable models, including ball-shaped card boxes"
         }
       ],
       "link": "https://makerworld.com/en/@cdtera2446890/upload"
     },
     {
-      "title": "Pokémon Pop-Up Card Box",
+      "title": "Spring-Loaded Card Box",
       "org": "Personal design project",
-      "summary": "To store my own cards, I designed a box in Fusion 360 whose lid pops open automatically, using a metal spring and a latch mechanism inside. After I shared it in online communities, it became a product sold on e-commerce platforms, with over 300 sets sold. Before production, I ran several rounds of tolerance tests, and I later revised the structure based on buyer feedback on how it opens and closes and on its durability.",
+      "summary": "To store my own trading cards, I designed a box in Fusion 360 whose lid pops open automatically, using a metal spring and a snap-fit latch. The design went through several rounds of tolerance testing and was revised based on user feedback on the opening feel and durability.",
       "images": [
         {
           "file": "s09_Img_cardbox.jpg",
-          "alt": "Three 3D-printed Poké Ball–style card boxes in red and white, purple and white, and yellow and black"
+          "alt": "Three ball-shaped 3D-printed card boxes in red-white, purple-white, and yellow-black"
         }
       ]
     },
