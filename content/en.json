@@ -12,12 +12,10 @@
   },
   "hero": {
     "interests": [
-      "Robot manipulation",
-      "Robot control",
-      "System identification (system ID)",
-      "Sim-to-real",
-      "Combining learning-based policies with control, including vision-language-action (VLA) models",
-      "Mechatronic integration"
+      "Robot manipulation and control",
+      "System identification",
+      "Sim-to-real transfer",
+      "Learning-based policies with control"
     ],
     "summary": "I am a fourth-year undergraduate in the Department of Mechanical and Electro-Mechanical Engineering at NSYSU. I led a team project on a multimodal smart waste-sorting bin, approved as a National Science and Technology Council (NSTC) college student research project, and captained our ball-shooting robot team at TEL Robot Combat. In summer 2026, I interned at City Science Lab @ Taipei Tech, where I worked on bimanual imitation learning with OpenArm. In graduate school, I plan to build a solid foundation in control theory and to understand how policies learned in simulation can be transferred reliably to physical robots.",
     "institution": "National Sun Yat-sen University",
@@ -30,8 +28,7 @@
       "id": "smart-bin",
       "category": "Research project",
       "title": "Smart Waste-Sorting Bin with Multimodal Fusion and Fallback AI Decision-Making",
-      "org": "Department of Mechanical and Electro-Mechanical Engineering, NSYSU · NSTC College Student Research Project (Grant No. 115-2813-C-110-129-E, approved)",
-      "advisor": "Assoc. Prof. Cheng-Jung Yang",
+      "org": "NSTC College Student Research Project · Advisor: Assoc. Prof. Cheng-Jung Yang",
       "role": "Team lead",
       "period": "NSTC project: Jul. 2026 – Feb. 2027",
       "tags": [
@@ -42,7 +39,7 @@
         "Edge–cloud collaboration",
         "Mechatronic integration"
       ],
-      "summary": "Images alone make it hard to tell apart waste items that look alike but differ in material, such as white plastic and paper bowls. We added a microphone so that the system judges each item from both its image and its impact sound, sorting it into one of four classes: paper, metal, plastic, or general waste. When the model's evidence is insufficient, the image is sent to a cloud vision-language model (Gemini) for a second check.",
+      "summary": "Sorts waste by fusing images with impact sounds and defers uncertain items to a cloud vision-language model; with cloud review, test accuracy reaches 99.49%.",
       "method": [
         "Bidirectional cross-attention fusion: image features and the Mel spectrogram of the impact sound query each other, with fusion weights learned during training.",
         "Modality dropout: the audio input is randomly zeroed during training, so the model can still classify from the image when thin, lightweight waste makes no sound on impact.",
@@ -83,15 +80,17 @@
       "video": {
         "youtubeId": "WwIwlDuYwN4"
       },
-      "brief": "Team lead. I handled mechatronic integration and communication among the PC, Raspberry Pi, and ESP32, and took part in data collection, model training, and experiments; teammates led the mechanism and the core AI model.",
+      "brief": "Team lead; mechatronic integration and communication among the PC, Raspberry Pi, and ESP32. Teammates led the mechanism and the core AI model.",
       "thumb": "s05_Img_mech.jpg",
-      "thumbAlt": "Photo of the bin interior labeling the Pi Camera, infrared sensor, servo motor, and microphone, with the black disc-shaped pan-tilt sorting plate in the center"
+      "thumbAlt": "Photo of the bin interior labeling the Pi Camera, infrared sensor, servo motor, and microphone, with the black disc-shaped pan-tilt sorting plate in the center",
+      "overview": "Images alone make it hard to tell apart waste items that look alike but differ in material, such as white plastic and paper bowls. We added a microphone so that the system judges each item from both its image and its impact sound, sorting it into one of four classes: paper, metal, plastic, or general waste. When the model's evidence is insufficient, the image is sent to a cloud vision-language model (Gemini) for a second check.",
+      "orgFull": "Department of Mechanical and Electro-Mechanical Engineering, NSYSU · NSTC College Student Research Project (Grant No. 115-2813-C-110-129-E, approved)"
     },
     {
       "id": "openarm-bimanual",
       "category": "Research internship",
       "title": "Bimanual Object Handover on OpenArm: Real2Sim2Real Imitation Learning",
-      "org": "Summer UROP research internship · City Science Lab @ Taipei Tech (National Taipei University of Technology)",
+      "org": "Summer UROP research internship · City Science Lab @ Taipei Tech",
       "role": "Research intern (three-person team)",
       "period": "Jul.–Aug. 2026",
       "tags": [
@@ -104,7 +103,7 @@
         "Sim-to-real",
         "MuJoCo"
       ],
-      "summary": "We worked on a bimanual handover of a Pringles can on the OpenArm system. We recorded demonstrations in Isaac Sim through VR teleoperation, augmented the data with Isaac Lab Mimic, fine-tuned SmolVLA, and evaluated the policy in simulation and on the real robot while analyzing the sim-to-real gap.",
+      "summary": "Trained a policy for the OpenArm bimanual robot to hand over a Pringles can: VR teleoperation demos, data augmentation with Isaac Lab Mimic, SmolVLA fine-tuning, and evaluation in simulation and on the real robot.",
       "results": [
         "About 60% success rate in Isaac Sim, with failures mostly at the handover step.",
         "Image randomization (brightness, saturation, etc.) improved the success rate by about 20%.",
@@ -144,7 +143,7 @@
       "video": {
         "youtubeId": "BDO_n6OTzGI"
       },
-      "brief": "Member of a three-person team (summer UROP research internship). Earlier in the internship, I also studied robot-arm workspace, dynamics, and impedance torque compensation in MuJoCo and tried system identification on a physical arm.",
+      "brief": "Member of a three-person team (summer UROP research internship).",
       "thumb": "urop_thumb.jpg",
       "method": [
         "Teleoperation: demonstrations were recorded in Isaac Sim with VR (Meta Quest Pro) and a keyboard.",
@@ -165,14 +164,15 @@
         "Move to dexterous robotic hands for more complex grasping.",
         "Extend the approach to mobile-base bimanual systems."
       ],
-      "thumbAlt": "The OpenArm bimanual robot in the lab with a Pringles can on the table and a monitor showing the run"
+      "thumbAlt": "The OpenArm bimanual robot in the lab with a Pringles can on the table and a monitor showing the run",
+      "overview": "We worked on a bimanual handover of a Pringles can on the OpenArm system. We recorded demonstrations in Isaac Sim through VR teleoperation, augmented the data with Isaac Lab Mimic, fine-tuned SmolVLA, and evaluated the policy in simulation and on the real robot while analyzing the sim-to-real gap.",
+      "orgFull": "Summer UROP research internship · City Science Lab @ Taipei Tech (National Taipei University of Technology)"
     },
     {
       "id": "tel-robot-combat",
       "category": "Competition",
       "title": "Ball-Shooting Robot for TEL Robot Combat 2025",
-      "org": "TEL Robot Combat 2025 (Tokyo Electron), 10th edition",
-      "advisor": "Assoc. Prof. Cheng-Jung Yang and Asst. Prof. Kai-Yi Weng",
+      "org": "TEL Robot Combat 2025 · Advisors: Assoc. Prof. Cheng-Jung Yang and Asst. Prof. Kai-Yi Weng",
       "role": "Team captain · hardware architecture and mechanism design",
       "period": "Jul.–Dec. 2025",
       "tags": [
@@ -183,7 +183,7 @@
         "Rapid prototyping",
         "Teamwork"
       ],
-      "summary": "The task was to build a robot that aims automatically and shoots balls into the holes of a nine-hole target grid. Our four-member team brought together students from mechanical engineering, electrical engineering, and computer science. As team captain, I was responsible for the overall hardware architecture and the key mechanism designs, and I coordinated the division of work.",
+      "summary": "A ball-shooting robot that aims automatically at a nine-hole target; our team received the Creative Technology Award (Excellence).",
       "contributions": [
         "Built the chassis from scratch: assembled an aluminum extrusion frame with mecanum wheels and completed the motor wiring and power distribution, then cut aluminum plates to divide the body into upper, middle, and lower levels.",
         "Split the robot into three separately developed modules (Elevator for ball lifting, Feeder for bridging balls into the launcher, and Firing for launching), then assembled the whole robot and checked for interference in Fusion 360.",
@@ -252,9 +252,11 @@
       "video": {
         "youtubeId": "T3OZJ4vV-2I"
       },
-      "brief": "Team captain. I led the hardware architecture and the mechanism design of the whole robot (chassis, ball feeding, bridge, and launcher); teammates handled software and AI.",
+      "brief": "Team captain; hardware architecture and mechanism design of the whole robot. Teammates handled software and AI.",
       "thumb": "s06_Img_mod_full.jpg",
-      "thumbAlt": "CAD model of the fully assembled ball-shooting robot, showing the aluminum extrusion frame, three-level structure, and mecanum wheels"
+      "thumbAlt": "CAD model of the fully assembled ball-shooting robot, showing the aluminum extrusion frame, three-level structure, and mecanum wheels",
+      "overview": "The task was to build a robot that aims automatically and shoots balls into the holes of a nine-hole target grid. Our four-member team brought together students from mechanical engineering, electrical engineering, and computer science. As team captain, I was responsible for the overall hardware architecture and the key mechanism designs, and I coordinated the division of work.",
+      "orgFull": "TEL Robot Combat 2025 (Tokyo Electron), 10th edition"
     },
     {
       "id": "robot-navigation-course",
@@ -268,7 +270,7 @@
         "Reinforcement learning",
         "ROS 2"
       ],
-      "summary": "Starting from a vehicle kinematic model, the projects progressed from map exploration and global path planning to local trajectory tracking, and part of the work was moved to ROS 2 to practice node communication.",
+      "summary": "Implemented A* and RRT* path planning and Stanley and LQR trajectory tracking, and practiced node communication in ROS 2.",
       "contributions": [
         "Path planning: implemented graph-search-based A* and sampling-based RRT*, tuned the step size and rewiring radius in simulation, compared the two on maps with complex obstacles, and observed how RRT* gradually converges toward the optimal path.",
         "Trajectory tracking: implemented the geometric Stanley controller and the optimal-control-based LQR (linear quadratic regulator).",
@@ -299,7 +301,9 @@
       ],
       "brief": "Course projects.",
       "thumb": "s08_Img_s5_Image_0.jpg",
-      "thumbAlt": "RRT* implementation: sampling tree and planned path on a map with black hexagonal obstacles"
+      "thumbAlt": "RRT* implementation: sampling tree and planned path on a map with black hexagonal obstacles",
+      "overview": "Starting from a vehicle kinematic model, the projects progressed from map exploration and global path planning to local trajectory tracking, and part of the work was moved to ROS 2 to practice node communication.",
+      "orgFull": "Robot Navigation course, National Tsing Hua University (NTHU) AI Alliance"
     }
   ],
   "publications": [
@@ -378,7 +382,7 @@
     {
       "title": "3D Model Design and Open-Source Sharing",
       "org": "MakerWorld, Thingiverse",
-      "summary": "In my spare time, I turn everyday ideas into 3D models of small mechanisms and household items and upload them to open platforms such as MakerWorld and Thingiverse. Users from many countries often send photos of their prints and suggestions for changes, which taught me to adjust designs for different printers, slicers, and materials (PLA, TPU, etc.) so that the models are easier to print (DFM).",
+      "summary": "I turn everyday ideas into 3D models and share them on MakerWorld and Thingiverse, adjusting designs for printability (DFM) based on feedback from users in many countries.",
       "images": [
         {
           "file": "s09_Img_s7_maker.jpg",
@@ -390,7 +394,7 @@
     {
       "title": "Spring-Loaded Card Box",
       "org": "Personal design project",
-      "summary": "To store my own trading cards, I designed a box in Fusion 360 whose lid pops open automatically, using a metal spring and a snap-fit latch. The design went through several rounds of tolerance testing and was revised based on user feedback on the opening feel and durability.",
+      "summary": "A card box designed in Fusion 360 whose lid pops open with a metal spring and snap-fit latch, refined through several rounds of tolerance testing and user feedback.",
       "images": [
         {
           "file": "s09_Img_cardbox.jpg",
@@ -402,7 +406,7 @@
       "title": "Department Volleyball Team",
       "org": "Department of Mechanical and Electro-Mechanical Engineering, NSYSU",
       "role": "Team captain (1 year)",
-      "summary": "I joined the department volleyball team in college and later served as captain, leading the team in many matches and organizing several tournaments. The team was runner-up in the Inter-Department Cup.",
+      "summary": "Captained the department volleyball team for a year, leading the team in matches and organizing tournaments; runner-up in the Inter-Department Cup.",
       "images": [
         {
           "file": "s09_Img_volley.jpg",
@@ -452,13 +456,15 @@
       "year": "Year",
       "title": "Title",
       "playVideo": "Play video",
-      "abstractOnly": "Abstract only",
       "figure": "Fig.",
       "link": "Profile",
-      "more": "Details and figures",
+      "more": "Details",
       "myRole": "My role",
       "video": "Video",
-      "next": "Future work"
+      "next": "Future work",
+      "overview": "Overview",
+      "photos": "Project photos",
+      "toProject": "Project"
     },
     "sections": {
       "about": "About",

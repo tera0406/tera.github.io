@@ -55,7 +55,7 @@ const links = [
             : `${c.hero.standing}, ${c.hero.department}, ${c.hero.institution}`}</p>
           <p class="bio">{c.hero.summary}</p>
           <p class="interests-line"><span class="k">{ui.tb.interests}</span>
-            <span class="interests">{c.hero.interests.map((i) => <span>{i}</span>)}</span>
+            <span class="interests">{c.hero.interests.join(SEP)}</span>
           </p>
           <p class="next"><span class="k">{ui.tb.next}</span> {c.hero.next}</p>
           <p class="links">
@@ -96,7 +96,6 @@ const links = [
             ))}
           </tbody>
         </table>
-        <p class="note print-hide">{ui.labels.abstractOnly}</p>
       </section>
 
       <!-- ===== 研究與專案 ===== -->
@@ -111,15 +110,27 @@ const links = [
               <div class="proj-text">
                 <span class="cat num">{[r.category, r.period].filter(Boolean).join(SEP)}</span>
                 <h3 id={`t-${r.id}`}>{r.title}</h3>
-                <p class="org">{r.org}{r.advisor && <>{SEP}{ui.labels.advisor}{COLON}{r.advisor}</>}</p>
-                <p>{r.summary}</p>
-                <p class="role"><strong>{ui.labels.myRole}{COLON}</strong>{r.brief}</p>
+                <p class="org">{r.org}</p>
+                <p class="summary">{r.summary}</p>
+                <p class="role"><span class="k">{ui.labels.myRole}</span> {r.brief}</p>
                 {r.video && <a class="btn watch" href={`#video-${r.video.youtubeId}`}><span aria-hidden="true">▶</span> {ui.labels.video}<span class="visually-hidden">{COLON}{r.title}</span></a>}
               </div>
             </div>
+            {/* 照片列：點照片會展開下方的詳細內容並捲到該張圖 */}
+            {r.images?.filter((im) => im.file !== r.thumb).length > 0 && (
+              <ul class="strip" aria-label={ui.labels.photos}>
+                {r.images.filter((im) => im.file !== r.thumb).slice(0, 4).map((im) => (
+                  <li><a href={`#fig-${im.file.replace(/\W/g, '-')}`}>
+                    <Image src={img(im.file)} alt={im.caption} widths={[240, 480]} sizes="240px" loading="lazy" />
+                  </a></li>
+                ))}
+              </ul>
+            )}
             <details class="more">
               <summary>{ui.labels.more}<span class="visually-hidden">{COLON}{r.title}</span></summary>
               <div class="more-body">
+                <p class="overview">{r.overview}</p>
+                <p class="org-full">{r.orgFull}</p>
                 <div class="more-grid">
                   {r.method && <div><h4>{ui.labels.method}</h4><ul>{r.method.map((m) => <li>{m}</li>)}</ul></div>}
                   {r.system && <div><h4>{ui.labels.system}</h4><p>{r.system}</p></div>}
@@ -134,7 +145,7 @@ const links = [
                 {r.images?.length > 0 && (
                   <div class="figs">
                     {r.images.map((im) => (
-                      <figure class:list={{ wide: im.wide }}>
+                      <figure class:list={{ wide: im.wide }} id={`fig-${im.file.replace(/\W/g, '-')}`}>
                         <Image src={img(im.file)} alt={im.alt} widths={im.wide ? [560, 1040] : [280, 560]}
                                sizes={im.wide ? '(max-width: 860px) 100vw, 520px' : '(max-width: 860px) 50vw, 250px'} loading="lazy" />
                         <figcaption>{im.caption}</figcaption>
@@ -155,11 +166,12 @@ const links = [
         <div class="videos">
           {c.videos.map((v) => (
             <figure class="video" id={`video-${v.youtubeId}`}>
-              <Video id={v.youtubeId} title={v.title} label={`${ui.labels.playVideo}${COLON}${v.title}`} />
+              <Video id={v.youtubeId} title={v.title} label={`${ui.labels.playVideo}${COLON}${v.title}`}
+                     poster={projectById[v.relatedProject] ? img(projectById[v.relatedProject].thumb) : undefined} />
               <figcaption>
                 <span class="t">{v.title}</span>
                 <span class="c">{v.caption}</span>
-                {projectById[v.relatedProject] && <> <a href={`#${v.relatedProject}`}>→ {projectById[v.relatedProject].title}</a></>}
+                {projectById[v.relatedProject] && <> <a href={`#${v.relatedProject}`}>→ {ui.labels.toProject}<span class="visually-hidden">{COLON}{projectById[v.relatedProject].title}</span></a></>}
               </figcaption>
             </figure>
           ))}
@@ -229,10 +241,16 @@ const links = [
       try { localStorage.setItem('theme', root.dataset.theme); } catch {}
       sync();
     });
-    // 從影片連到專案時，自動展開該專案的詳細內容。
+    // 連到專案或專案裡的圖片時，自動展開該專案的詳細內容。
     const openTarget = () => {
       if (!location.hash) return;
-      document.getElementById(decodeURIComponent(location.hash.slice(1)))?.querySelector('details.more')?.setAttribute('open', '');
+      const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (!el) return;
+      const details = el.closest('details') ?? el.querySelector('details.more');
+      if (details && !details.open) {
+        details.open = true;
+        if (el.closest('details')) el.scrollIntoView({ block: 'center' });
+      }
     };
     addEventListener('hashchange', openTarget); openTarget();
   </script>
