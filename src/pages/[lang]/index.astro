@@ -1,0 +1,239 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Video from '../../components/Video.astro';
+import { content, img, pageUrl, LANGS, type Lang } from '../../lib/content';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const c = content[lang];
+const ui = c.ui;
+const other: Lang = lang === 'zh' ? 'en' : 'zh';
+const SEP = lang === 'zh' ? '・' : ' · ';
+const COLON = lang === 'zh' ? '：' : ': ';
+const sections = ['about', 'publications', 'research', 'videos', 'awards', 'activities'] as const;
+const projectById = Object.fromEntries(c.research.map((r) => [r.id, r]));
+// [顯示文字, 連結, 列印時顯示的網址]
+const links = [
+  [ui.contact.email, `mailto:${c.contact.email}`, c.contact.email],
+  [ui.contact.linkedin, c.contact.linkedin, 'linkedin.com/in/…243b0a317'],
+  [ui.contact.github, c.contact.github, 'github.com/tera0406'],
+  [ui.contact.makerworld, c.contact.makerworld, 'makerworld.com/@cdtera2446890'],
+] as const;
+---
+<Base lang={lang} c={c}>
+  <a class="skip-link" href="#main">{ui.skip}</a>
+
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="#main">{c.meta.name}</a>
+      <nav class="nav" aria-label={lang === 'zh' ? '頁面區塊' : 'Sections'}>
+        <ul>{sections.map((s) => <li><a href={`#${s}`}>{ui.nav[s]}</a></li>)}</ul>
+      </nav>
+      <div class="tools">
+        <a class="btn" href={pageUrl(other)} hreflang={other === 'zh' ? 'zh-TW' : 'en'} lang={other === 'zh' ? 'zh-Hant-TW' : 'en'}
+           title={ui.switchLabel} data-lang-switch={other}>{ui.switchTo}</a>
+        <button class="btn" type="button" data-theme-toggle aria-pressed="false" aria-label={ui.theme} title={ui.theme}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" /></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <!-- ===== 簡介 ===== -->
+    <div class="wrap">
+      <section class="hero" id="about" aria-labelledby="h-name">
+        <div class="hero-text">
+          <h1 id="h-name">{c.meta.name}</h1>
+          <p class="alt" lang={lang === 'en' ? 'zh-Hant-TW' : 'en'}>{c.meta.nameAlt}</p>
+          <p class="affil">{lang === 'zh'
+            ? `${c.hero.institution} ${c.hero.department}・${c.hero.standing}`
+            : `${c.hero.standing}, ${c.hero.department}, ${c.hero.institution}`}</p>
+          <p class="bio">{c.hero.summary}</p>
+          <p class="interests-line"><span class="k">{ui.tb.interests}</span>
+            <span class="interests">{c.hero.interests.map((i) => <span>{i}</span>)}</span>
+          </p>
+          <p class="next"><span class="k">{ui.tb.next}</span> {c.hero.next}</p>
+          <p class="links">
+            {links.map(([label, href, printText]) => <a href={href} data-print={printText} rel={href.startsWith('mailto') ? undefined : 'me noopener'}>{label}</a>)}
+          </p>
+        </div>
+        <div class="hero-photo">
+          <Image src={img(c.meta.photo.file)} alt={c.meta.photo.alt} widths={[240, 480]} sizes="(max-width: 760px) 160px, 240px" loading="eager" fetchpriority="high" />
+        </div>
+      </section>
+    </div>
+
+    <div class="wrap">
+      <!-- ===== 著作 ===== -->
+      <section class="section" id="publications" aria-labelledby="h-pubs">
+        <div class="section-head"><h2 id="h-pubs">{ui.sections.publications}</h2></div>
+        <table class="pubs">
+          <thead class="visually-hidden"><tr><th class="k y">{ui.labels.year}</th><th class="k">{ui.labels.title}</th><th class="k s">{ui.labels.status}</th></tr></thead>
+          <tbody>
+            {c.publications.map((p) => (
+              <tr>
+                <td class="y num">{p.year}</td>
+                <td>
+                  <span class="pub-title" lang={/[一-鿿]/.test(p.title) ? 'zh-Hant-TW' : 'en'}>{p.title}</span>
+                  {p.titleEn && <span class="pub-title-alt" lang="en">{p.titleEn}</span>}
+                  <span class="pub-venue">{p.type}{SEP}{p.venue}</span>
+                  <details>
+                    <summary>{ui.labels.showAbstract}<span class="visually-hidden">{COLON}{p.title}</span></summary>
+                    <p>{p.abstract}</p>
+                  </details>
+                  {p.note && <span class="note">{p.note}</span>}
+                </td>
+                <td class="s">
+                  {p.status && <span class:list={['chip', p.statusKind]}>{p.status}</span>}
+                  {p.date && <div class="note num">{p.date}</div>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="note print-hide">{ui.labels.abstractOnly}</p>
+      </section>
+
+      <!-- ===== 研究與專案 ===== -->
+      <section class="section" id="research" aria-labelledby="h-research">
+        <div class="section-head"><h2 id="h-research">{ui.sections.research}</h2></div>
+        {c.research.map((r) => (
+          <article class="project" id={r.id} aria-labelledby={`t-${r.id}`}>
+            <div class="proj-grid">
+              <div class="thumb">
+                <Image src={img(r.thumb)} alt={r.thumbAlt} widths={[320, 640]} sizes="(max-width: 700px) 100vw, 300px" loading="lazy" />
+              </div>
+              <div class="proj-text">
+                <span class="cat num">{[r.category, r.period].filter(Boolean).join(SEP)}</span>
+                <h3 id={`t-${r.id}`}>{r.title}</h3>
+                <p class="org">{r.org}{r.advisor && <>{SEP}{ui.labels.advisor}{COLON}{r.advisor}</>}</p>
+                <p>{r.summary}</p>
+                <p class="role"><strong>{ui.labels.myRole}{COLON}</strong>{r.brief}</p>
+                {r.video && <a class="btn watch" href={`#video-${r.video.youtubeId}`}><span aria-hidden="true">▶</span> {ui.labels.video}<span class="visually-hidden">{COLON}{r.title}</span></a>}
+              </div>
+            </div>
+            <details class="more">
+              <summary>{ui.labels.more}<span class="visually-hidden">{COLON}{r.title}</span></summary>
+              <div class="more-body">
+                <div class="more-grid">
+                  {r.method && <div><h4>{ui.labels.method}</h4><ul>{r.method.map((m) => <li>{m}</li>)}</ul></div>}
+                  {r.system && <div><h4>{ui.labels.system}</h4><p>{r.system}</p></div>}
+                  {r.design && <div><h4>{ui.labels.design}</h4><ul>{r.design.map((m) => <li>{m}</li>)}</ul></div>}
+                  {r.contributions?.length > 0 && <div><h4>{ui.labels.contributions}</h4><ul>{r.contributions.map((m) => <li>{m}</li>)}</ul></div>}
+                  {r.team && <div><h4>{ui.labels.team}</h4><p>{r.team}</p></div>}
+                  {r.results?.length > 0 && <div><h4>{ui.labels.results}</h4><ul class="num">{r.results.map((m) => <li>{m}</li>)}</ul></div>}
+                  {r.challenges && <div><h4>{ui.labels.challenges}</h4><ul>{r.challenges.map((m) => <li>{m}</li>)}</ul></div>}
+                  {r.next && <div><h4>{ui.labels.next}</h4><ul>{r.next.map((m) => <li>{m}</li>)}</ul></div>}
+                  {r.reflection && <div><h4>{ui.labels.reflection}</h4><p>{r.reflection}</p></div>}
+                </div>
+                {r.images?.length > 0 && (
+                  <div class="figs">
+                    {r.images.map((im) => (
+                      <figure class:list={{ wide: im.wide }}>
+                        <Image src={img(im.file)} alt={im.alt} widths={im.wide ? [560, 1040] : [280, 560]}
+                               sizes={im.wide ? '(max-width: 860px) 100vw, 520px' : '(max-width: 860px) 50vw, 250px'} loading="lazy" />
+                        <figcaption>{im.caption}</figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                )}
+                <ul class="tags">{r.tags.map((t) => <li>{t}</li>)}</ul>
+              </div>
+            </details>
+          </article>
+        ))}
+      </section>
+
+      <!-- ===== 影片 ===== -->
+      <section class="section" id="videos" aria-labelledby="h-videos">
+        <div class="section-head"><h2 id="h-videos">{ui.sections.videos}</h2></div>
+        <div class="videos">
+          {c.videos.map((v) => (
+            <figure class="video" id={`video-${v.youtubeId}`}>
+              <Video id={v.youtubeId} title={v.title} label={`${ui.labels.playVideo}${COLON}${v.title}`} />
+              <figcaption>
+                <span class="t">{v.title}</span>
+                <span class="c">{v.caption}</span>
+                {projectById[v.relatedProject] && <> <a href={`#${v.relatedProject}`}>→ {projectById[v.relatedProject].title}</a></>}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <p class="note">{ui.videoConsent}</p>
+      </section>
+
+      <!-- ===== 獲獎與計畫 ===== -->
+      <section class="section" id="awards" aria-labelledby="h-awards">
+        <div class="section-head"><h2 id="h-awards">{ui.sections.awards}</h2></div>
+        <div class="ledger">
+          {c.awards.map((a) => (
+            <div>
+              <div class="num">{a.year}</div>
+              <div><div class="t">{a.title}</div><div class="sub">{a.org}</div>{a.note && <div class="sub">{a.note}</div>}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ===== 其他 ===== -->
+      <section class="section" id="activities" aria-labelledby="h-acts">
+        <div class="section-head"><h2 id="h-acts">{ui.sections.activities}</h2></div>
+        <div class="acts">
+          {c.activities.map((a) => (
+            <article class="act">
+              {a.images?.[0] && <Image src={img(a.images[0].file)} alt={a.images[0].alt} widths={[360, 720]} sizes="(max-width: 700px) 100vw, 360px" loading="lazy" />}
+              <div class="body">
+                <h3>{a.title}</h3>
+                <div class="sub">{a.org}{a.role && `${SEP}${a.role}`}</div>
+                <p>{a.summary}</p>
+                {a.link && <a href={a.link} rel="noopener">{ui.labels.link} ↗</a>}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <span>© 2026 {c.meta.name}{SEP}{ui.updated} <span class="num">{c.updated}</span>{SEP}<a href={`mailto:${c.contact.email}`}>{c.contact.email}</a></span>
+      <span class="tools"><button class="btn" type="button" onclick="window.print()">{ui.print}</button></span>
+    </div>
+  </footer>
+
+  <script>
+    // 語言切換：記住選擇，並保留目前看到的區塊（#hash）。
+    document.querySelectorAll<HTMLAnchorElement>('[data-lang-switch]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        try { localStorage.setItem('lang', a.dataset.langSwitch!); } catch {}
+        if (location.hash) { e.preventDefault(); location.href = a.href + location.hash; }
+      });
+    });
+    // 深色／淺色切換：記在 localStorage。
+    const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+    const isDark = () => {
+      const t = document.documentElement.dataset.theme;
+      return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    };
+    const sync = () => toggle?.setAttribute('aria-pressed', String(isDark()));
+    sync();
+    toggle?.addEventListener('click', () => {
+      const root = document.documentElement;
+      root.dataset.theme = isDark() ? 'light' : 'dark';
+      try { localStorage.setItem('theme', root.dataset.theme); } catch {}
+      sync();
+    });
+    // 從影片連到專案時，自動展開該專案的詳細內容。
+    const openTarget = () => {
+      if (!location.hash) return;
+      document.getElementById(decodeURIComponent(location.hash.slice(1)))?.querySelector('details.more')?.setAttribute('open', '');
+    };
+    addEventListener('hashchange', openTarget); openTarget();
+  </script>
+</Base>

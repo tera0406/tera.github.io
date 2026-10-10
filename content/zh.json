@@ -1,0 +1,483 @@
+{
+  "meta": {
+    "lang": "zh-Hant-TW",
+    "name": "姜兆源",
+    "nameAlt": "Chao-Yuan Chiang (Tera)",
+    "title": "姜兆源 Chao-Yuan Chiang｜機構設計・機電整合・機器人學習",
+    "description": "姜兆源（Tera），國立中山大學機械與機電工程學系四年級。整理研究專案、論文、競賽與作品，關注機器人操作、控制，以及把模擬中學到的策略穩定地用到真機上。",
+    "photo": {
+      "file": "s03_Img_photo.jpg",
+      "alt": "姜兆源的大頭照，戴眼鏡、穿淺藍色襯衫"
+    }
+  },
+  "hero": {
+    "interests": [
+      "機器人操作（Manipulation）",
+      "機器人控制",
+      "系統辨識（System Identification）",
+      "Sim-to-real",
+      "學習式策略與控制的結合（含 VLA 模型）",
+      "機電整合"
+    ],
+    "summary": "我就讀國立中山大學機械與機電工程學系四年級，做過多模態智慧分類垃圾桶（國科會大專學生研究計畫，擔任專題組長）與 TEL Robot Combat 射球機器人（擔任隊長），2026 年暑假在臺北科大 City Science Lab 實習，參與 OpenArm 雙臂模仿學習。研究所希望把控制理論補紮實，弄清楚模擬中學到的策略如何穩定地用到真機上。",
+    "institution": "國立中山大學",
+    "department": "機械與機電工程學系",
+    "standing": "大學部四年級",
+    "next": "新加坡南洋理工大學（NTU）・2027 年 1–5 月"
+  },
+  "research": [
+    {
+      "id": "smart-bin",
+      "category": "研究專題",
+      "title": "多模態融合與備援式 AI 決策之智慧分類垃圾桶",
+      "org": "國立中山大學 機械與機電工程學系・國科會大專學生研究計畫（計畫編號 115-2813-C-110-129-E，核定通過）",
+      "advisor": "楊政融 副教授",
+      "role": "專題組長",
+      "period": "國科會計畫 2026/07 – 2027/02",
+      "tags": [
+        "交叉注意力",
+        "模態丟失訓練",
+        "證據深度學習",
+        "多模態融合",
+        "雲地協作",
+        "機電整合"
+      ],
+      "summary": "只靠影像，很難分辨外觀相近、材質不同的垃圾（例如白色的塑膠碗和紙碗）。我們加裝麥克風，把影像和撞擊聲一起判斷，自動分成紙類、金屬、塑膠、一般垃圾四類；模型證據不足時，再把影像交給雲端視覺語言模型（Gemini）複核。",
+      "method": [
+        "雙向交叉注意力融合：讓影像和撞擊聲的梅爾頻譜互相查詢，融合權重由訓練學得。",
+        "模態丟失訓練：訓練時隨機把聲音歸零，輕薄垃圾落下沒有聲音時，仍能靠影像判斷。",
+        "認知不確定度閘控：用證據深度學習（EDL）估計模型的認知不確定度，證據不足時，把影像交給雲端視覺語言模型（Gemini）複核。",
+        "實體分選：以二自由度雲台分選，紅外線感測器在分選後確認盤面是否有殘留，有殘留時自動以大角度傾斜與震動排除。"
+      ],
+      "system": "三層分工：PC 做模型推論，樹莓派以有限狀態機控制流程，ESP32 負責感測與馬達；樹莓派與 ESP32 之間以 UART 通訊。",
+      "contributions": [
+        "擔任專題組長。",
+        "負責機電整合和裝置之間的通訊：樹莓派控制流程、ESP32 負責感測與馬達、PC 做模型推論，我實作三者之間的資料傳輸。",
+        "開發後台監控系統，即時追蹤推論狀態，並以結構化方式儲存分類資料，用於建立資料集。",
+        "參與模型訓練、實驗和訓練資料蒐集。",
+        "和負責機構的組員討論並一起改進機構，也和組員一起把研究方向定案。"
+      ],
+      "team": "我們是三人專題團隊：機構設計與製造由組員負責，核心 AI 演算法與多模態模型訓練由另一位組員負責；我負責機電整合與裝置之間的通訊，並參與模型訓練、實驗與資料蒐集。",
+      "results": [
+        "自建 1,305 組影像–撞擊聲配對資料。",
+        "測試集準確率 98.48%（純視覺基線 92.89%）。",
+        "聲音輸入完全歸零時仍有 96.45%（未經模態丟失訓練為 89.34%）。",
+        "加上雲端複核後達 99.49%，高於僅邊緣端（98.48%）與僅雲端（97.46%）。",
+        "資料蒐集期間 1,305 次投放中，殘留修正動作觸發 13 次（0.996%），13 次都成功把垃圾排出。",
+        "論文獲 CSMMT 2026 小修後接受；期刊稿件已投稿 IEEE Access，審查中。"
+      ],
+      "reflection": "這是我第一次把專題實驗整理並寫成正式的研究文章，學到研究與論文撰寫的方法，也更了解研究對嚴謹性與細節的要求。",
+      "images": [
+        {
+          "file": "s05_Img_diagram.png",
+          "alt": "研究架構示意：上方比較外觀明顯不同的垃圾與外觀相似的白色塑膠碗、紙碗；中間為影像與聲音輸入的交叉融合模型；下方為垃圾桶內攝影機與麥克風蒐集影像和頻譜資料",
+          "caption": "研究架構",
+          "wide": true
+        },
+        {
+          "file": "s05_Img_mech.jpg",
+          "alt": "垃圾桶內部實機照片，標示 Pi Camera、紅外線感測器、伺服馬達與麥克風的位置，中央為黑色圓盤分選雲台",
+          "caption": "機構設計與感測配置"
+        }
+      ],
+      "video": {
+        "youtubeId": "WwIwlDuYwN4"
+      },
+      "brief": "專題組長；負責機電整合與 PC、樹莓派、ESP32 之間的通訊，參與資料蒐集、模型訓練與實驗。機構與核心 AI 模型由組員負責。",
+      "thumb": "s05_Img_mech.jpg",
+      "thumbAlt": "垃圾桶內部實機照片，標示 Pi Camera、紅外線感測器、伺服馬達與麥克風的位置，中央為黑色圓盤分選雲台"
+    },
+    {
+      "id": "openarm-bimanual",
+      "category": "研究實習",
+      "title": "OpenArm 雙臂物品交接：Real2Sim2Real 模仿學習",
+      "org": "UROP 暑期研究實習・City Science Lab @ Taipei Tech（國立臺北科技大學）",
+      "role": "研究實習生（三人團隊）",
+      "period": "2026 年 7–8 月",
+      "tags": [
+        "Isaac Sim",
+        "Isaac Lab Mimic",
+        "VR 遙操作",
+        "Domain randomization",
+        "LeRobot",
+        "SmolVLA",
+        "Sim-to-real",
+        "MuJoCo"
+      ],
+      "summary": "在 OpenArm 雙臂系統上完成品客罐的雙手交接任務。我們在 Isaac Sim 中以 VR 遙操作錄製示範，用 Isaac Lab Mimic 擴增資料，微調 SmolVLA，並在模擬與真機上評估、分析 sim-to-real 差距。",
+      "results": [
+        "Isaac Sim 中成功率約 60%，失敗主要發生在交接步驟。",
+        "加入影像隨機化（亮度、飽和度等）後，成功率提升約 20%。",
+        "真機以三台相機評估，有成功完成的案例，也有在交接階段失敗的案例。"
+      ],
+      "reflection": "這兩個月實際從模擬做到真機（sim-to-real），也讓我在機器人學習這個方向上有更深入的了解。",
+      "images": [
+        {
+          "file": "urop_annotation.jpg",
+          "caption": "資料標註：右手交接階段（Isaac Sim）",
+          "alt": "Isaac Sim 俯視畫面：白色桌面上的品客罐，右手機械臂伸向罐子準備交接",
+          "wide": true
+        },
+        {
+          "file": "urop_domain_rand.jpg",
+          "caption": "Domain randomization 範例（左上為原始影像）",
+          "alt": "六張同一場景的模擬影像，分別套用不同的亮度、色彩與仿射變換",
+          "wide": true
+        },
+        {
+          "file": "urop_sim_eval.jpg",
+          "caption": "Isaac Sim 評估",
+          "alt": "Isaac Sim 中 OpenArm 雙臂與品客罐的正面視角"
+        },
+        {
+          "file": "urop_real_eval.jpg",
+          "caption": "真機評估",
+          "alt": "實驗室中的 OpenArm 雙臂與桌上的品客罐，旁邊有螢幕顯示執行畫面"
+        },
+        {
+          "file": "urop_sim2real_gap.jpg",
+          "caption": "Sim-to-real 差距分析：模擬與真機畫面並排比對",
+          "alt": "電腦畫面同時顯示 Isaac Sim 的雙臂模擬與三台實體相機的影像",
+          "wide": true
+        }
+      ],
+      "video": {
+        "youtubeId": "BDO_n6OTzGI"
+      },
+      "brief": "三人團隊成員（暑期 UROP 研究實習）。實習前段，我另外在 MuJoCo 學習機械手臂的工作空間、動力學與阻抗力矩補償，並在實體手臂上嘗試 system ID。",
+      "thumb": "urop_thumb.jpg",
+      "method": [
+        "遙操作錄製示範：在 Isaac Sim 中以 VR（Meta Quest Pro）與鍵盤操作雙臂錄製示範。",
+        "資料標註：把示範切成子任務。右手為「伸手→抓取」與「交接→放開→返回」，左手為「等待→交接→返回」。",
+        "資料生成：以 Isaac Lab Mimic 將 10 筆人工 VR 示範擴增為 500 筆合成資料。",
+        "Domain randomization：在 Isaac Lab 中對影像做亮度、對比、飽和度、色相、銳利度與仿射變換的隨機化。",
+        "模型訓練：以 LeRobot 微調 SmolVLA。",
+        "Sim-to-real 差距分析：把 Isaac Sim 中的預測動作送到真機執行，比對模擬與真實環境的差異。"
+      ],
+      "challenges": [
+        "已解決的 sim-to-real 差距：相機位置與角度、品客罐尺寸與外觀、機器人初始位置（影響最大）。",
+        "尚未解決的差距：光影、環境（桌面、背景等）、真實的相機碰撞模型。",
+        "擴增資料一開始不正確；參考 Isaac Lab Mimic 官方的雙手交接範例後，重新設定子任務的標註斷點（示範時一次只動一隻手，子任務之間才切得出斷點），並修正模擬中手指碰撞失效的問題。"
+      ],
+      "next": [
+        "找出重複執行時成功率下降的原因。",
+        "以更廣的環境隨機化提升成功率。",
+        "改用靈巧手處理更複雜的抓取。",
+        "延伸到移動底盤的雙臂系統。"
+      ],
+      "thumbAlt": "實驗室中的 OpenArm 雙臂與桌上的品客罐，旁邊有螢幕顯示執行畫面"
+    },
+    {
+      "id": "tel-robot-combat",
+      "category": "競賽",
+      "title": "TEL Robot Combat 射球機器人",
+      "org": "2025 東京威力科創機器人大賽（TEL Robot Combat，第 10 屆）",
+      "advisor": "楊政融 副教授、翁愷貽 助理教授",
+      "role": "隊長・硬體架構與機構設計",
+      "period": "2025 年 7–12 月",
+      "tags": [
+        "Fusion 360",
+        "機構設計",
+        "3D 列印",
+        "電路佈局",
+        "快速原型",
+        "團隊合作"
+      ],
+      "summary": "比賽題目是做出一台能自動瞄準、把球射進九宮格靶孔的機器人。我們是機械、電機、資工組成的四人跨系隊伍，我擔任隊長，負責整台的硬體架構和關鍵機構設計，也帶團隊分工。",
+      "contributions": [
+        "從零搭底盤：用鋁擠型組車架、裝麥克納姆輪，完成馬達接線和電源配置；再裁切鋁板，把機體分成上、中、下三層。",
+        "把機器拆成 Elevator（送球）、Feeder（搭橋填充球）、Firing（發射）三個模組分開開發，最後在 Fusion 360 裡做全機組裝和干涉檢查。",
+        "自己畫並 3D 列印關鍵零件：儲球槽、皮帶送球、凸輪搭橋與推桿、雙飛輪發射艙，每個模組都經過好幾輪列印、測試和修改。",
+        "馬達選型、扭力估算和電源規劃是我之前比較少碰的部分，開發初期花了不少時間查 datasheet，估算動態扭力和功耗。"
+      ],
+      "design": [
+        "球在機器裡的路徑：儲球槽（斜底＋撥桿防卡球）→ 皮帶提升（取代阿基米德螺旋）→ 紅外線偵測（偵測到球就停送）→ 凸輪搭橋（旋轉送進發射艙）→ 雙飛輪發射。",
+        "電池、Jetson Orin、STM32、馬達驅動和光達放在最下層壓低重心，抵消射球時的後座力；中層是儲球槽；上層是送球機構和可水平、俯仰轉動的雙飛輪砲台。",
+        "發射分兩段：推桿先把球推到定位，再由兩個高速旋轉的飛輪夾擠射出。搭橋機構送完球就收回，不會擋到砲台轉動；ZED 深度相機放在最前方、貼近砲管軸線，減少瞄準時的視差。"
+      ],
+      "team": "軟體和 AI 由隊友負責：Jetson Orin 做決策、STM32 做即時控制，遙控改用 ELRS 航模通訊以避開場地嚴重的 2.4 GHz 干擾；瞄準用 YOLOv11-seg 抓出場上的「TEL 10 TEL」字樣，再用 SolvePnP 加上 Canny 邊緣精修，算出靶孔的 3D 座標。考量射球才是得分重點，我們最後採用「手動移動＋自動瞄準」的策略。",
+      "challenges": [
+        "初步測試時，底盤馬達高速空轉停不下來，和負責韌體的隊友一起排查，發現是接線錯誤，加上跳過了 MCU 開機自檢。",
+        "幾個 3D 列印零件因為疲勞和應力集中斷裂，找得出原因，但來不及重新設計；這讓我知道材料特性和結構模擬是我還要補強的地方。"
+      ],
+      "results": [
+        "射擊初速穩定在 12–15 m/s。",
+        "團隊獲得創意技術獎特優。"
+      ],
+      "images": [
+        {
+          "file": "s07_Img_award.jpg",
+          "alt": "2025 TEL Robot Combat 頒獎台上，隊伍成員與機器人和「創意技術獎 特優」看板合照",
+          "caption": "競賽成果：創意技術獎特優",
+          "wide": true
+        },
+        {
+          "file": "s07_Img_cad1.jpg",
+          "alt": "全機 Fusion 360 模型，以引線標示發射模組、ZED 深度相機、儲球槽、麥克納姆輪、STM32、光達與電池等元件位置",
+          "caption": "全機 Fusion 360 模型與元件配置（一）",
+          "wide": true
+        },
+        {
+          "file": "s07_Img_cad2.jpg",
+          "alt": "全機 Fusion 360 模型的另一個角度，標示凸輪搭橋模組、雲台伺服馬達、皮帶減速馬達與 AGX Orin 等元件",
+          "caption": "全機 Fusion 360 模型與元件配置（二）",
+          "wide": true
+        },
+        {
+          "file": "s06_Img_mod_full.jpg",
+          "alt": "射球機器人全車組裝的 CAD 模型，鋁擠型車架、三層結構與麥克納姆輪",
+          "caption": "全車組裝"
+        },
+        {
+          "file": "s06_Img_mod_elev.jpg",
+          "alt": "Elevator 送球模組的 CAD 模型，直立的皮帶提升機構",
+          "caption": "Elevator 送球"
+        },
+        {
+          "file": "s06_Img_mod_feed.jpg",
+          "alt": "Feeder 搭橋進球模組的 CAD 模型",
+          "caption": "Feeder 搭橋進球"
+        },
+        {
+          "file": "s06_Img_mod_fire.jpg",
+          "alt": "Firing 雙飛輪發射艙的 CAD 模型",
+          "caption": "Firing 雙飛輪發射"
+        },
+        {
+          "file": "s07_Img_yolo.jpg",
+          "alt": "靶孔定位結果：九宮格靶上以綠色圓圈與紅點標出偵測到的靶孔",
+          "caption": "YOLO＋SolvePnP＋Canny 靶孔定位結果"
+        }
+      ],
+      "video": {
+        "youtubeId": "T3OZJ4vV-2I"
+      },
+      "brief": "隊長；負責硬體架構與全機機構設計（底盤、送球、搭橋與發射模組），軟體與 AI 由隊友負責。",
+      "thumb": "s06_Img_mod_full.jpg",
+      "thumbAlt": "射球機器人全車組裝的 CAD 模型，鋁擠型車架、三層結構與麥克納姆輪"
+    },
+    {
+      "id": "robot-navigation-course",
+      "category": "課程實作",
+      "title": "機器導航課程實作",
+      "org": "清華大學 AI 聯盟・機器導航課程",
+      "role": "修課實作",
+      "tags": [
+        "路徑規劃",
+        "控制理論",
+        "強化學習",
+        "ROS 2"
+      ],
+      "summary": "以車輛運動學模型為基礎，從地圖探索、全域路徑規劃做到局部軌跡追蹤，並把其中一部分搬到 ROS 2 上練習節點通訊。",
+      "contributions": [
+        "路徑規劃：實作以圖搜尋為基礎的 A* 和以取樣為基礎的 RRT*，在模擬中調整步長和尋優半徑，比較兩者在障礙物複雜的地圖上的表現，並觀察 RRT* 如何逐步收斂到最佳路徑。",
+        "軌跡追蹤：分別實作幾何式的 Stanley 控制器，和基於最佳控制的 LQR（線性二次調節器）。",
+        "Proly 強化學習旗幟奪取：讓 agent 在會變動的環境裡學會導航並搶到旗子，主要練習 reward function 的設計和狀態空間的定義。",
+        "ROS 2：把控制器和路徑規劃器拆成不同節點，用 topic 發布、訂閱車輛狀態和控制指令；處理過節點間的通訊延遲與訊息型別不符的問題。這部分只做到基礎通訊的除錯，還沒做完整的系統整合。"
+      ],
+      "images": [
+        {
+          "file": "s08_Img_s5_Image_0.jpg",
+          "alt": "RRT* 演算法實作：黑色六角形障礙物地圖上的取樣樹與規劃路徑",
+          "caption": "RRT* 演算法實作"
+        },
+        {
+          "file": "s08_Img_s5_Image_1.jpg",
+          "alt": "運動學模型與路徑追蹤的模擬結果，顯示追蹤軌跡與賽道形狀",
+          "caption": "運動學模型與路徑追蹤"
+        },
+        {
+          "file": "s08_Img_s5_Image_2.jpg",
+          "alt": "Proly 強化學習旗幟奪取的遊戲畫面，島嶼地圖與計時器",
+          "caption": "Proly 強化學習旗幟奪取"
+        },
+        {
+          "file": "s08_Img_s5_Image_3.jpg",
+          "alt": "ROS 2 夾取機器車的模擬畫面，多個視窗顯示車載相機影像與地圖",
+          "caption": "ROS 2 夾取機器車"
+        }
+      ],
+      "brief": "修課實作。",
+      "thumb": "s08_Img_s5_Image_0.jpg",
+      "thumbAlt": "RRT* 演算法實作：黑色六角形障礙物地圖上的取樣樹與規劃路徑"
+    }
+  ],
+  "publications": [
+    {
+      "id": "ieee-access-2026",
+      "type": "期刊稿件",
+      "title": "Modality-Robust Confidence-Gated Cascade for Edge–Cloud Waste Sorting: Design and Evaluation on a Physical Prototype",
+      "venue": "IEEE Access（Regular Manuscript）",
+      "status": "審查中",
+      "date": "2026 年 9 月 20 日投稿",
+      "abstract": "現有垃圾分類方法多只依賴單張影像，難以分辨外觀相似但材質不同的物品；既有的影像與撞擊聲融合研究，則假設兩種模態在訓練與評估時都一定存在。本文的智慧分類垃圾桶以雙向交叉注意力融合影像與聲音特徵，以模態丟失訓練讓聲音失效時仍能辨識，並以證據式輸出層提供的不確定度，決定樣本由邊緣端判定或轉交雲端視覺語言模型。系統部署在具紅外線分選後確認迴路的二自由度雲台上，經 1,305 次實體投放驗證：融合模型準確率 98.48%（純視覺基線 92.89%），聲音完全遮蔽時仍有 96.45%（未經模態丟失訓練為 89.34%）；以獨立驗證集校準轉交門檻後，串接系統達 99.49%，高於僅邊緣端與僅雲端兩種配置。",
+      "year": "2026",
+      "statusKind": "review"
+    },
+    {
+      "id": "csmmt-2026",
+      "type": "研討會論文",
+      "title": "結合多模態交叉融合與備援式 AI 決策機制之智慧分類垃圾桶研製",
+      "titleEn": "Development of an AIoT Smart Waste-Sorting Bin Integrating Multimodal Cross-Attention Fusion and an Evidential Cloud-Edge Fallback Decision Mechanism",
+      "venue": "第 29 屆全國機構與機器設計學術研討會（CSMMT 2026），國立臺灣科技大學，論文編號 22",
+      "status": "小修後接受",
+      "date": "研討會：2026 年 11 月 6–7 日",
+      "abstract": "本研究實作一套具雲地協作機制的 AIoT 智慧分類垃圾桶，處理「同色異質物體難以辨識」與「邊緣模型過度自信造成高分誤判」兩個問題。辨識上以影像與撞擊聲（梅爾頻譜）的交叉注意力融合，並加入模態丟失訓練，因應輕薄垃圾落下時沒有聲音的情況；決策上以證據深度學習量化認知不確定度，超過在驗證集校準的門檻時，交由雲端視覺語言模型（Gemini）備援推理；實體分選則由具防卡料排障功能的二自由度雲台執行。以 1,305 組影像與撞擊聲配對資料實機驗證，融合模型的測試集準確率由純視覺的 92.89% 提升至 98.48%，聲音輸入遮蔽時仍有 96.45%，雲地協作後達 99.49%，高於僅邊緣端與僅雲端配置。",
+      "year": "2026",
+      "statusKind": "ok"
+    },
+    {
+      "id": "bachelor-thesis-114",
+      "type": "學士論文",
+      "title": "結合多模態交叉融合與備援式 AI 決策機制之智慧分類垃圾桶研製",
+      "venue": "國立中山大學 機械與機電工程學系",
+      "abstract": "本研究製作一套具動態容錯與雲地協作機制的 AIoT 智慧分類垃圾桶。硬體上以雙自由度隱藏式雲台搭配中心凹陷的導流平台，把儲存空間分成四個區域，並以大角度傾斜與高頻震動排除卡料；演算法上以交叉注意力融合影像與梅爾頻率倒頻譜係數聲音特徵，並以模態丟失訓練處理輕薄垃圾落下沒有聲音的情況。決策上以證據深度學習量化認知不確定度，超過門檻時呼叫雲端視覺語言模型 Gemini 備援推理。經實體機構驗證與準確率–速度權衡曲線調校，整體分類準確率由單一模態的 85% 提升並穩定在 93% 以上。",
+      "year": "114 學年度",
+      "statusKind": "plain",
+      "note": "學士論文為本研究較早階段的版本；後續結果見上方兩篇論文。"
+    }
+  ],
+  "awards": [
+    {
+      "title": "創意技術獎 特優",
+      "org": "2025 TEL Robot Combat（第 10 屆東京威力科創機器人大賽）",
+      "year": "2025",
+      "note": "隊長・硬體架構與機構設計"
+    },
+    {
+      "title": "國科會大專學生研究計畫 核定通過",
+      "org": "國家科學及技術委員會（計畫編號 115-2813-C-110-129-E）",
+      "year": "2026",
+      "note": "計畫名稱：結合多模態辨識與備援式 AI 決策機制之智慧分類垃圾桶研製；執行期間 2026/07 – 2027/02"
+    },
+    {
+      "title": "系際杯亞軍",
+      "org": "國立中山大學 機械與機電工程學系 系排球隊"
+    }
+  ],
+  "videos": [
+    {
+      "youtubeId": "WwIwlDuYwN4",
+      "title": "智慧分類垃圾桶 Demo",
+      "caption": "多模態智慧分類垃圾桶（國科會大專學生研究計畫）的實機展示。",
+      "relatedProject": "smart-bin"
+    },
+    {
+      "youtubeId": "BDO_n6OTzGI",
+      "title": "OpenArm 雙臂模仿學習 Demo",
+      "caption": "UROP 研究實習（City Science Lab @ Taipei Tech，2026 年 7–8 月）：OpenArm 雙手交接任務示範。",
+      "relatedProject": "openarm-bimanual"
+    },
+    {
+      "youtubeId": "T3OZJ4vV-2I",
+      "title": "2025 TEL Robot Combat 比賽影片",
+      "caption": "2025 東京威力科創機器人大賽射球機器人比賽影片，團隊獲創意技術獎特優。",
+      "relatedProject": "tel-robot-combat"
+    }
+  ],
+  "activities": [
+    {
+      "title": "3D 模型設計與開源分享",
+      "org": "MakerWorld、Thingiverse",
+      "summary": "課餘時間把生活中想到的點子做出來，畫小機構和生活用品的 3D 模型，上傳到 MakerWorld、Thingiverse 等開源平台。常收到各國使用者的列印成品照片和修改建議，從中學到依不同印表機、切片軟體和材料（PLA、TPU 等）調整設計，讓模型更好印（DFM）。",
+      "images": [
+        {
+          "file": "s09_Img_s7_maker.jpg",
+          "alt": "MakerWorld 作品頁截圖，包含球形卡牌收納盒等 3D 列印模型"
+        }
+      ],
+      "link": "https://makerworld.com/en/@cdtera2446890/upload"
+    },
+    {
+      "title": "自動彈蓋卡牌收納盒",
+      "org": "個人設計作品",
+      "summary": "為了收納自己的卡牌，用 Fusion 360 設計會自動彈開蓋子的收納盒，內部用金屬彈簧加卡榫機構。設計過程做了好幾輪公差測試，並依使用者對開合手感與耐用度的回饋修改結構。",
+      "images": [
+        {
+          "file": "s09_Img_cardbox.jpg",
+          "alt": "三個球形的 3D 列印卡牌收納盒，紅白、紫白與黃黑配色"
+        }
+      ]
+    },
+    {
+      "title": "系排球隊",
+      "org": "國立中山大學 機械與機電工程學系",
+      "role": "隊長（1 年）",
+      "summary": "大學加入系排球隊，後來擔任隊長，帶隊打了許多比賽，也辦過幾場比賽；曾獲系際杯亞軍。",
+      "images": [
+        {
+          "file": "s09_Img_volley.jpg",
+          "alt": "系排球隊在室內體育館的團體照，中央兩位隊員交接紅包，其他隊員坐在後方鼓掌"
+        }
+      ]
+    }
+  ],
+  "contact": {
+    "email": "cdtera2446890@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/%E5%85%86%E6%BA%90-tera-%E5%A7%9C-243b0a317/",
+    "makerworld": "https://makerworld.com/en/@cdtera2446890/upload",
+    "github": "https://github.com/tera0406"
+  },
+  "ui": {
+    "skip": "跳到主要內容",
+    "switchTo": "English",
+    "theme": "切換深色／淺色模式",
+    "print": "列印履歷",
+    "nav": {
+      "about": "簡介",
+      "publications": "著作",
+      "research": "研究與專案",
+      "videos": "影片",
+      "awards": "獲獎",
+      "activities": "其他"
+    },
+    "tb": {
+      "institution": "學校",
+      "department": "系所",
+      "standing": "年級",
+      "interests": "研究興趣",
+      "next": "交換計畫"
+    },
+    "labels": {
+      "advisor": "指導老師",
+      "method": "研究方法",
+      "system": "系統架構",
+      "contributions": "我負責的部分",
+      "team": "團隊分工",
+      "design": "設計重點",
+      "challenges": "遇到的問題",
+      "results": "結果",
+      "reflection": "心得",
+      "showAbstract": "摘要",
+      "status": "狀態",
+      "year": "年份",
+      "title": "題目",
+      "playVideo": "播放影片",
+      "abstractOnly": "目前僅提供摘要",
+      "figure": "圖",
+      "link": "作品頁",
+      "more": "詳細內容與圖片",
+      "myRole": "我的角色",
+      "video": "影片",
+      "next": "後續方向"
+    },
+    "sections": {
+      "about": "簡介",
+      "research": "研究與專案",
+      "publications": "著作",
+      "awards": "獲獎與計畫",
+      "videos": "影片",
+      "activities": "其他作品與活動"
+    },
+    "contact": {
+      "email": "Email",
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "makerworld": "MakerWorld"
+    },
+    "updated": "最後更新",
+    "videoConsent": "點選後才會從 YouTube（youtube-nocookie.com）載入影片。",
+    "switchLabel": "切換為英文版"
+  },
+  "updated": "2026-10"
+}

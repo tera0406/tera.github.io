@@ -1,0 +1,31 @@
+---
+// YouTube 延遲載入：先顯示縮圖，點了才載入 youtube-nocookie.com 的播放器。
+// 沒有 JavaScript 時，播放按鈕本身就是 YouTube 連結。
+interface Props { id: string; title: string; label: string }
+const { id, title, label } = Astro.props;
+---
+<div class="video-frame" data-yt={id} data-title={title}>
+  <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" width="480" height="360" loading="lazy" decoding="async" onerror="this.remove()" />
+  <a class="video-play" href={`https://www.youtube.com/watch?v=${id}`} aria-label={label} data-play>
+    <span aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+    </span>
+  </a>
+</div>
+
+<script>
+  // 點擊時把縮圖換成 iframe。
+  document.querySelectorAll<HTMLElement>('.video-frame[data-yt]').forEach((frame) => {
+    frame.querySelector<HTMLAnchorElement>('[data-play]')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${frame.dataset.yt}?autoplay=1&rel=0`;
+      iframe.title = frame.dataset.title || 'YouTube video';
+      iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      frame.replaceChildren(iframe);
+      iframe.focus();
+    });
+  });
+</script>
