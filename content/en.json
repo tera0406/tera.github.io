@@ -1,0 +1,490 @@
+{
+  "meta": {
+    "lang": "en",
+    "name": "Chao-Yuan Chiang",
+    "nameAlt": "姜兆源 (Tera)",
+    "title": "Chao-Yuan Chiang | Mechanism Design · Mechatronic Integration · Robot Learning",
+    "description": "Chao-Yuan (Tera) Chiang, a fourth-year undergraduate in the Department of Mechanical and Electro-Mechanical Engineering at National Sun Yat-sen University (NSYSU). This site collects my research projects, papers, competitions, and personal work, with a focus on robot manipulation, control, and transferring policies learned in simulation reliably to physical robots.",
+    "photo": {
+      "file": "s03_Img_photo.jpg",
+      "alt": "Portrait of Chao-Yuan Chiang wearing glasses and a light blue shirt"
+    }
+  },
+  "hero": {
+    "tagline": "Mechanical engineering undergraduate interested in robot manipulation and in making policies learned in simulation work reliably on physical robots.",
+    "affiliation": "Fourth-year undergraduate, Department of Mechanical and Electro-Mechanical Engineering, National Sun Yat-sen University (NSYSU)",
+    "interests": [
+      "Robot manipulation",
+      "Robot control",
+      "System identification (system ID)",
+      "Sim-to-real: transferring policies learned in simulation reliably to physical robots",
+      "Combining learning-based policies with control, including vision-language-action (VLA) models",
+      "Mechatronic integration"
+    ],
+    "summary": "I am a fourth-year undergraduate in the Department of Mechanical and Electro-Mechanical Engineering at NSYSU. I led a team project on a multimodal smart waste-sorting bin, approved as a National Science and Technology Council (NSTC) college student research project, and captained our ball-shooting robot team at TEL Robot Combat. In summer 2026, I interned at City Science Lab @ Taipei Tech, where I worked on bimanual imitation learning with OpenArm. In graduate school, I plan to build a solid foundation in control theory and understand how policies learned in simulation can be transferred reliably to physical robots.",
+    "institution": "National Sun Yat-sen University",
+    "department": "Mechanical & Electro-Mechanical Eng.",
+    "standing": "B.S., fourth year",
+    "next": "NTU Singapore · Jan.–May 2027"
+  },
+  "education": [
+    {
+      "school": "National Sun Yat-sen University (NSYSU)",
+      "dept": "Department of Mechanical and Electro-Mechanical Engineering",
+      "degree": "B.S. (in progress, fourth year)",
+      "details": [
+        "Undergraduate thesis (academic year 2025–26), advisor: Assoc. Prof. Cheng-Jung Yang"
+      ]
+    }
+  ],
+  "exchange": {
+    "school": "Nanyang Technological University (NTU), Singapore",
+    "type": "Exchange student",
+    "period": "Jan.–May 2027",
+    "plan": "Courses in smart manufacturing and robotics",
+    "status": "Planned"
+  },
+  "research": [
+    {
+      "id": "smart-bin",
+      "category": "Research project",
+      "title": "Smart Waste-Sorting Bin with Multimodal Fusion and Fallback AI Decision-Making",
+      "org": "Department of Mechanical and Electro-Mechanical Engineering, NSYSU · NSTC College Student Research Project (Grant No. 115-2813-C-110-129-E, approved)",
+      "advisor": "Assoc. Prof. Cheng-Jung Yang",
+      "role": "Team lead",
+      "period": "NSTC project: Jul. 2026 – Feb. 2027",
+      "tags": [
+        "Cross-attention",
+        "Modality dropout",
+        "Evidential deep learning (EDL)",
+        "Multimodal fusion",
+        "Edge–cloud collaboration",
+        "Mechatronic integration"
+      ],
+      "summary": "Images alone make it hard to tell apart waste items that look alike but differ in material, such as white plastic and paper bowls. We added a microphone so that the system judges each item from both its image and its impact sound, sorting it into one of four classes: paper, metal, plastic, or general waste. When the model's evidence is insufficient, the image is sent to a cloud vision-language model (Gemini) for a second check.",
+      "method": [
+        "Bidirectional cross-attention fusion: image features and the Mel spectrogram of the impact sound query each other, with fusion weights learned during training.",
+        "Modality dropout: the audio input is randomly zeroed during training, so the model can still classify from the image when thin, lightweight waste makes no sound on impact.",
+        "Epistemic uncertainty gating: evidential deep learning (EDL) estimates the model's epistemic uncertainty; when the evidence is insufficient, the image is sent to a cloud vision-language model (Gemini) for a second check.",
+        "Physical sorting: a two-degree-of-freedom pan-tilt mechanism sorts each item. After sorting, an infrared sensor checks whether anything remains on the plate; if so, the plate automatically tilts to a large angle and vibrates to clear it."
+      ],
+      "system": "Three-tier architecture: a PC runs model inference, a Raspberry Pi controls the process flow with a finite-state machine, and an ESP32 handles sensing and motors. The Raspberry Pi and ESP32 communicate over UART.",
+      "contributions": [
+        "Served as team lead.",
+        "Responsible for mechatronic integration and communication between devices: the Raspberry Pi controls the process flow, the ESP32 handles sensing and motors, and the PC runs model inference; I implemented the data exchange among the three.",
+        "Developed a back-end monitoring system that tracks inference status in real time and stores classification data in a structured format for building the dataset.",
+        "Took part in model training, experiments, and training data collection.",
+        "Worked with the teammate responsible for the mechanism to refine it, and settled the research direction together with the team."
+      ],
+      "team": "We are a three-member team: one teammate is responsible for mechanism design and fabrication, and another leads the core AI algorithms and multimodal model training. I am responsible for mechatronic integration and communication between devices, and I also take part in model training, experiments, and data collection.",
+      "results": [
+        "Built our own dataset of 1,305 paired image–impact sound samples.",
+        "Test accuracy of 98.48% (vision-only baseline: 92.89%).",
+        "96.45% with the audio input fully zeroed (89.34% without modality dropout training).",
+        "99.49% with cloud verification added, higher than the edge-only (98.48%) and cloud-only (97.46%) configurations.",
+        "During data collection, the residue-clearing motion was triggered 13 times in 1,305 drops (0.996%), and all 13 attempts cleared the waste.",
+        "Paper accepted with minor revisions at CSMMT 2026; a journal manuscript submitted to IEEE Access is under review."
+      ],
+      "reflection": "This was my first time organizing project experiments into a formal research paper. I learned how to conduct research and write a paper, and I gained a clearer sense of the rigor and attention to detail that research requires.",
+      "images": [
+        {
+          "file": "s05_Img_diagram.png",
+          "alt": "Research overview: top, waste items that look clearly different compared with a white plastic bowl and a white paper bowl that look alike; middle, the cross-fusion model taking image and audio inputs; bottom, the camera and microphone inside the bin collecting image and spectrogram data",
+          "caption": "Research overview",
+          "wide": true
+        },
+        {
+          "file": "s05_Img_mech.jpg",
+          "alt": "Photo of the bin interior labeling the Pi Camera, infrared sensor, servo motor, and microphone, with the black disc-shaped pan-tilt sorting plate in the center",
+          "caption": "Mechanism and sensor layout"
+        }
+      ],
+      "video": {
+        "youtubeId": "WwIwlDuYwN4"
+      },
+      "brief": "Team lead. I handled mechatronic integration and communication among the PC, Raspberry Pi, and ESP32, and took part in data collection, model training, and experiments; teammates led the mechanism and the core AI model.",
+      "thumb": "s05_Img_mech.jpg"
+    },
+    {
+      "id": "openarm-bimanual",
+      "category": "Research internship",
+      "title": "Bimanual Imitation Learning on OpenArm (Handover Task)",
+      "org": "UROP research internship · City Science Lab @ Taipei Tech (National Taipei University of Technology)",
+      "role": "Research intern (Undergraduate Research Opportunity Program)",
+      "period": "Jul.–Aug. 2026",
+      "tags": [
+        "MuJoCo",
+        "System identification",
+        "Isaac Sim",
+        "Isaac Lab Mimic",
+        "LeRobot",
+        "SmolVLA",
+        "VR teleoperation"
+      ],
+      "summary": "During my two months at City Science Lab, I first learned robot arm fundamentals in MuJoCo, including workspace, dynamics, and impedance torque compensation, then tried system identification on a physical arm before moving on to a bimanual object handover task with OpenArm.",
+      "contributions": [
+        "Given the time and cost constraints, I chose data augmentation to complete the bimanual handover task: I recorded about 20 human demonstrations through VR teleoperation in Isaac Sim, expanded them into over a thousand training samples with Isaac Lab Mimic, and fine-tuned SmolVLA.",
+        "Full pipeline: task setup → VR teleoperation (Isaac Sim) → data augmentation (Isaac Lab Mimic) → model training (LeRobot, SmolVLA) → simulation evaluation (Isaac Sim) → real-robot evaluation.",
+        "Debugging: the augmented data was initially incorrect. Following the official Isaac Lab Mimic bimanual handover example, I reset the subtask boundaries in the annotations (the demonstrations had to move only one hand at a time for the subtasks to be separable) and fixed finger collisions that were not working in simulation."
+      ],
+      "results": [
+        "Expanded about 20 demonstrations into over a thousand training samples.",
+        "Deployed the fine-tuned SmolVLA on the physical robot and evaluated it there."
+      ],
+      "reflection": "These two months took me from simulation to the physical robot (sim-to-real) and gave me a deeper understanding of robot learning.",
+      "images": [
+        {
+          "file": "s04_Img_s2_Step_1_image.jpg",
+          "alt": "Task setup: the physical OpenArm bimanual robot with the object to be handed over on the table",
+          "caption": "1. Task setup (real world)"
+        },
+        {
+          "file": "s04_Img_s2_Step_2_image.jpg",
+          "alt": "VR teleoperation: recording a demonstration by controlling the bimanual robot with VR in Isaac Sim",
+          "caption": "2. VR teleoperation (Isaac Sim)"
+        },
+        {
+          "file": "s04_Img_s2_Step_3_image.jpg",
+          "alt": "Data augmentation: multiple bimanual robot simulation environments side by side in Isaac Lab Mimic",
+          "caption": "3. Data augmentation (Isaac Lab Mimic)"
+        },
+        {
+          "file": "s04_Img_s2_Step_5_image.jpg",
+          "alt": "Simulation evaluation: the bimanual robot handing over an object on a white table in Isaac Sim",
+          "caption": "4. Evaluation in simulation (Isaac Sim)"
+        },
+        {
+          "file": "s04_Img_s2_Step_6_image.jpg",
+          "alt": "Real-robot evaluation: a physical robot arm grasping a red cylindrical object",
+          "caption": "5. Evaluation on the real robot"
+        }
+      ],
+      "video": {
+        "youtubeId": "BDO_n6OTzGI"
+      },
+      "brief": "UROP research intern.",
+      "thumb": "s04_Img_s2_Step_6_image.jpg"
+    },
+    {
+      "id": "tel-robot-combat",
+      "category": "Competition",
+      "title": "Ball-Shooting Robot for TEL Robot Combat 2025",
+      "org": "TEL Robot Combat 2025 (Tokyo Electron), 10th edition",
+      "advisor": "Assoc. Prof. Cheng-Jung Yang and Asst. Prof. Kai-Yi Weng",
+      "role": "Team captain · hardware architecture and mechanism design",
+      "period": "Jul.–Dec. 2025",
+      "tags": [
+        "Fusion 360",
+        "Mechanism design",
+        "3D printing",
+        "Circuit layout",
+        "Rapid prototyping",
+        "Teamwork"
+      ],
+      "summary": "The task was to build a robot that aims automatically and shoots balls into the holes of a nine-hole target grid. Our four-member team brought together students from mechanical engineering, electrical engineering, and computer science. As team captain, I was responsible for the overall hardware architecture and the key mechanism designs, and I coordinated the division of work.",
+      "contributions": [
+        "Built the chassis from scratch: assembled an aluminum extrusion frame with mecanum wheels and completed the motor wiring and power distribution, then cut aluminum plates to divide the body into upper, middle, and lower levels.",
+        "Split the robot into three modules developed separately, Elevator (ball transport), Feeder (bridge that loads balls), and Firing (launch), and then completed the full assembly and interference checks in Fusion 360.",
+        "Designed and 3D printed the key parts myself: the ball reservoir, the belt-driven ball feed, the cam-driven bridge and pusher, and the dual-flywheel launch chamber. Each module went through several rounds of printing, testing, and revision.",
+        "Motor selection, torque estimation, and power planning were less familiar to me, so early in development I spent considerable time reading datasheets and estimating dynamic torque and power consumption."
+      ],
+      "design": [
+        "Ball path: reservoir (sloped floor and a stirring lever to prevent jams) → belt lift (replacing an Archimedes screw) → infrared detection (feeding stops when a ball is detected) → cam-driven bridge (rotates to deliver the ball into the launch chamber) → dual-flywheel launch.",
+        "The battery, Jetson Orin, STM32, motor drivers, and LiDAR sit on the lowest level to keep the center of gravity low and counter the recoil when shooting; the middle level holds the ball reservoir; the upper level holds the feed mechanism and a dual-flywheel turret that can pan and tilt.",
+        "Launching happens in two stages: a pusher first moves the ball into position, then two high-speed flywheels grip and launch it. The bridge retracts after delivering a ball so it does not block the turret's rotation. The ZED depth camera is mounted at the very front, close to the barrel axis, to reduce parallax when aiming."
+      ],
+      "team": "Software and AI were handled by my teammates: the Jetson Orin makes decisions and the STM32 handles real-time control, and remote control was switched to an ELRS radio link to avoid severe 2.4 GHz interference at the venue. For aiming, YOLOv11-seg detects the \"TEL 10 TEL\" lettering on the field, and SolvePnP with Canny edge refinement computes the 3D coordinates of the target holes. Since shooting was the main source of points, we ultimately adopted a strategy of manual driving with automatic aiming.",
+      "challenges": [
+        "In initial tests, the chassis motors spun at high speed and would not stop. Debugging with the teammate responsible for firmware, we traced the problem to a wiring error combined with a skipped MCU power-on self-test.",
+        "Several 3D-printed parts fractured due to fatigue and stress concentration. We identified the cause but did not have time to redesign them, which showed me that material properties and structural simulation are areas I still need to strengthen."
+      ],
+      "results": [
+        "Launch velocity consistently within 12–15 m/s.",
+        "The team received the Creative Technology Award (Excellence)."
+      ],
+      "images": [
+        {
+          "file": "s07_Img_award.jpg",
+          "alt": "Team members with the robot on the TEL Robot Combat 2025 award stage, beside a board reading \"Creative Technology Award (Excellence)\"",
+          "caption": "Creative Technology Award (Excellence)",
+          "wide": true
+        },
+        {
+          "file": "s07_Img_cad1.jpg",
+          "alt": "Full-robot Fusion 360 model with callouts marking the launch module, ZED depth camera, ball reservoir, mecanum wheels, STM32, LiDAR, and battery",
+          "caption": "Fusion 360 model and component layout (1)",
+          "wide": true
+        },
+        {
+          "file": "s07_Img_cad2.jpg",
+          "alt": "Another view of the full-robot Fusion 360 model, marking the cam-driven bridge module, turret servo motor, belt gear motor, and AGX Orin",
+          "caption": "Fusion 360 model and component layout (2)",
+          "wide": true
+        },
+        {
+          "file": "s06_Img_mod_full.jpg",
+          "alt": "CAD model of the fully assembled ball-shooting robot, showing the aluminum extrusion frame, three-level structure, and mecanum wheels",
+          "caption": "Full assembly"
+        },
+        {
+          "file": "s06_Img_mod_elev.jpg",
+          "alt": "CAD model of the Elevator module, an upright belt lift mechanism",
+          "caption": "Elevator module"
+        },
+        {
+          "file": "s06_Img_mod_feed.jpg",
+          "alt": "CAD model of the Feeder module, the bridge that loads balls into the launcher",
+          "caption": "Feeder module"
+        },
+        {
+          "file": "s06_Img_mod_fire.jpg",
+          "alt": "CAD model of the Firing module's dual-flywheel launch chamber",
+          "caption": "Firing module (dual flywheel)"
+        },
+        {
+          "file": "s07_Img_yolo.jpg",
+          "alt": "Target localization result: detected holes on the nine-hole target marked with green circles and red dots",
+          "caption": "Target-hole localization with YOLO, SolvePnP, and Canny"
+        }
+      ],
+      "video": {
+        "youtubeId": "T3OZJ4vV-2I"
+      },
+      "brief": "Team captain. I led the hardware architecture and the mechanism design of the whole robot (chassis, ball feeding, bridge, and launcher); teammates handled software and AI.",
+      "thumb": "s06_Img_mod_full.jpg"
+    },
+    {
+      "id": "robot-navigation-course",
+      "category": "Coursework project",
+      "title": "Robot Navigation Course Projects",
+      "org": "Robot Navigation course, National Tsing Hua University (NTHU) AI Alliance",
+      "role": "Course project",
+      "tags": [
+        "Path planning",
+        "Control theory",
+        "Reinforcement learning",
+        "ROS 2"
+      ],
+      "summary": "Starting from a vehicle kinematic model, the projects progressed from map exploration and global path planning to local trajectory tracking, and part of the work was moved to ROS 2 to practice node communication.",
+      "contributions": [
+        "Path planning: implemented graph-search-based A* and sampling-based RRT*, tuned the step size and rewiring radius in simulation, compared the two on maps with complex obstacles, and observed how RRT* gradually converges toward the optimal path.",
+        "Trajectory tracking: implemented the geometric Stanley controller and the optimal-control-based LQR (linear quadratic regulator).",
+        "Proly reinforcement learning capture-the-flag: trained an agent to navigate a changing environment and capture the flag, mainly practicing reward function design and state space definition.",
+        "ROS 2: split the controller and path planner into separate nodes that publish and subscribe to vehicle states and control commands over topics, and dealt with communication latency and message type mismatches between nodes. This part covered only debugging of basic communication, not full system integration."
+      ],
+      "images": [
+        {
+          "file": "s08_Img_s5_Image_0.jpg",
+          "alt": "RRT* implementation: sampling tree and planned path on a map with black hexagonal obstacles",
+          "caption": "RRT* implementation"
+        },
+        {
+          "file": "s08_Img_s5_Image_1.jpg",
+          "alt": "Simulation results of the kinematic model and path tracking, showing the tracked trajectory and the track layout",
+          "caption": "Kinematic model and path tracking"
+        },
+        {
+          "file": "s08_Img_s5_Image_2.jpg",
+          "alt": "Game screen of the Proly reinforcement learning capture-the-flag task, with an island map and a timer",
+          "caption": "Proly reinforcement-learning capture the flag"
+        },
+        {
+          "file": "s08_Img_s5_Image_3.jpg",
+          "alt": "ROS 2 simulation of a robot car with a gripper, with several windows showing onboard camera images and the map",
+          "caption": "ROS 2 robot car with gripper"
+        }
+      ],
+      "brief": "Course projects.",
+      "thumb": "s08_Img_s5_Image_0.jpg"
+    }
+  ],
+  "publications": [
+    {
+      "id": "ieee-access-2026",
+      "type": "Journal manuscript",
+      "title": "Modality-Robust Confidence-Gated Cascade for Edge–Cloud Waste Sorting: Design and Evaluation on a Physical Prototype",
+      "venue": "IEEE Access (Regular Manuscript)",
+      "status": "Under review",
+      "date": "Submitted Sep. 20, 2026",
+      "abstract": "Existing waste classification methods rely on a single visual image and cannot reliably separate objects that look alike but differ in material, while recent work that fuses vision with impact sound assumes that both modalities are always available. We present a smart waste-sorting bin in which bidirectional cross-attention fuses visual and acoustic features, modality dropout training keeps the model discriminative when the auditory input fails, and an evidential output layer supplies an uncertainty value that gates whether a sample is decided at the edge or deferred to a cloud vision-language model. The system was deployed on a two-degree-of-freedom pan-tilt mechanism with an infrared post-sorting verification loop and validated over 1,305 physical drops: fusion reached 98.48% accuracy against 92.89% for a vision-only baseline, and retained 96.45% when the auditory input was fully masked, against 89.34% without modality dropout training. With the deferral threshold calibrated on a held-out validation set, the cascade reached 99.49%, above both the edge-only and cloud-only configurations.",
+      "abstractEn": "Existing waste classification methods rely on a single visual image and cannot reliably separate objects that look alike but differ in material. Recent work fuses vision with impact sound, but trains and evaluates under the assumption that both modalities are always available. Thin, lightweight waste carries too little impact energy to produce a recognizable acoustic signature, and such models also lack any mechanism for recognizing when their own evidence is insufficient. We present a smart waste-sorting bin built on a modality-robust confidence-gated cascade. Bidirectional cross-attention fuses visual and acoustic features with weights learned end to end; modality dropout training randomly disables the auditory input so that the model remains discriminative when one modality fails; and an evidential output layer supplies an uncertainty value that gates whether a sample is decided at the edge or deferred to a cloud vision-language model. The system was deployed on a two-degree-of-freedom pan-tilt mechanism with an infrared post-sorting verification loop and validated over 1,305 physical drops. On a purpose-built dataset of paired images and impact sounds, fusion reached 98.48% accuracy against 92.89% for a vision-only baseline, and retained 96.45% when the auditory input was fully masked, against 89.34% without modality dropout training. With the deferral threshold calibrated on a held-out validation set, the cascade reached 99.49%, above both the edge-only and cloud-only configurations. These results show that a model’s own confidence can allocate inference resources effectively in multimodal recognition under incomplete sensing.",
+      "relatedProject": "smart-bin",
+      "fulltext": false
+    },
+    {
+      "id": "csmmt-2026",
+      "type": "Conference paper",
+      "title": "Development of an AIoT Smart Waste-Sorting Bin Integrating Multimodal Cross-Attention Fusion and an Evidential Cloud-Edge Fallback Decision Mechanism",
+      "venue": "29th National Conference on Mechanism and Machine Design (CSMMT 2026), Paper No. 22, National Taiwan University of Science and Technology, Taipei, Taiwan",
+      "status": "Accepted (minor revision)",
+      "date": "Conference: Nov. 6–7, 2026",
+      "abstract": "This study implements an AIoT smart waste-sorting bin with edge–cloud collaboration to address two problems: discriminating same-colored objects made of different materials, and high-confidence misclassification caused by overconfident edge models. For recognition, a cross-attention network fuses visual images and impact acoustics (Mel spectrograms), and modality dropout training handles thin, lightweight waste that produces no impact sound. For decision-making, evidential deep learning quantifies epistemic uncertainty; when it exceeds a threshold calibrated on the validation set, a cloud vision-language model (Gemini) performs fallback inference, and a two-degree-of-freedom pan-tilt mechanism with an anti-jamming function performs the physical sorting. Validated on the prototype with 1,305 paired image and impact-sound samples, fusion raised test accuracy from 92.89% (vision only) to 98.48% and maintained 96.45% when the audio input was masked; the edge–cloud cascade reached 99.49%, higher than both the edge-only and cloud-only configurations.",
+      "relatedProject": "smart-bin",
+      "fulltext": false
+    },
+    {
+      "id": "bachelor-thesis-114",
+      "type": "Undergraduate thesis",
+      "title": "Development of an AIoT Smart Waste-Sorting Bin Integrating Multimodal Cross-Attention Fusion and an Evidential Cloud-Edge Fallback Decision Mechanism",
+      "venue": "Department of Mechanical and Electro-Mechanical Engineering, NSYSU (in Chinese)",
+      "abstract": "This work builds an AIoT smart waste-sorting bin with dynamic fault tolerance and edge–cloud collaboration. On the hardware side, a two-degree-of-freedom concealed pan-tilt mechanism with a center-recessed guide platform divides the storage space into four zones, and large-angle tilting and high-frequency vibration clear jammed items. On the algorithm side, cross-attention fuses image features with Mel-frequency cepstral coefficient (MFCC) audio features, and modality dropout training handles thin, lightweight waste that falls without making a sound. For decision-making, evidential deep learning quantifies epistemic uncertainty, and when it exceeds a threshold, the cloud vision-language model Gemini performs fallback inference. After validation on the physical mechanism and tuning with an accuracy–speed trade-off curve, overall classification accuracy rose from 85% with a single modality to consistently above 93%.",
+      "relatedProject": "smart-bin",
+      "fulltext": false
+    }
+  ],
+  "awards": [
+    {
+      "title": "Creative Technology Award (Excellence)",
+      "org": "TEL Robot Combat 2025 (Tokyo Electron), 10th edition",
+      "year": "2025",
+      "note": "Team captain · hardware architecture and mechanism design"
+    },
+    {
+      "title": "NSTC College Student Research Project (approved)",
+      "org": "National Science and Technology Council (NSTC), Grant No. 115-2813-C-110-129-E",
+      "year": "2026",
+      "note": "Project title (translated): Development of a Smart Waste-Sorting Bin Integrating Multimodal Recognition and a Fallback AI Decision Mechanism; Project period: Jul. 2026 – Feb. 2027"
+    },
+    {
+      "title": "Runner-up, Inter-Department Cup",
+      "org": "Volleyball team, Department of Mechanical and Electro-Mechanical Engineering, NSYSU"
+    }
+  ],
+  "videos": [
+    {
+      "youtubeId": "WwIwlDuYwN4",
+      "title": "Smart Waste-Sorting Bin Demo",
+      "caption": "Demonstration of the physical prototype of the multimodal smart waste-sorting bin (NSTC college student research project).",
+      "relatedProject": "smart-bin"
+    },
+    {
+      "youtubeId": "BDO_n6OTzGI",
+      "title": "OpenArm Bimanual Imitation Learning Demo",
+      "caption": "UROP research internship (City Science Lab @ Taipei Tech, Jul.–Aug. 2026): demonstration of the OpenArm bimanual handover task.",
+      "relatedProject": "openarm-bimanual"
+    },
+    {
+      "youtubeId": "T3OZJ4vV-2I",
+      "title": "TEL Robot Combat 2025 Competition Video",
+      "caption": "Competition video of our ball-shooting robot at TEL Robot Combat 2025 (Tokyo Electron); the team received the Creative Technology Award (Excellence).",
+      "relatedProject": "tel-robot-combat"
+    }
+  ],
+  "activities": [
+    {
+      "title": "3D Model Design and Open-Source Sharing",
+      "org": "MakerWorld, Thingiverse",
+      "summary": "In my spare time, I turn everyday ideas into 3D models of small mechanisms and household items and upload them to open platforms such as MakerWorld and Thingiverse. Users from many countries often send photos of their prints and suggestions for changes, which taught me to adjust designs for different printers, slicers, and materials (PLA, TPU, etc.) so that the models are easier to print (DFM).",
+      "images": [
+        {
+          "file": "s09_Img_s7_maker.jpg",
+          "alt": "Screenshot of a MakerWorld profile page with models including a Poké Ball–style card box"
+        }
+      ],
+      "link": "https://makerworld.com/en/@cdtera2446890/upload"
+    },
+    {
+      "title": "Pokémon Pop-Up Card Box",
+      "org": "Personal design project",
+      "summary": "To store my own cards, I designed a box in Fusion 360 whose lid pops open automatically, using a metal spring and a latch mechanism inside. After I shared it in online communities, it became a product sold on e-commerce platforms, with over 300 sets sold. Before production, I ran several rounds of tolerance tests, and I later revised the structure based on buyer feedback on how it opens and closes and on its durability.",
+      "images": [
+        {
+          "file": "s09_Img_cardbox.jpg",
+          "alt": "Three 3D-printed Poké Ball–style card boxes in red and white, purple and white, and yellow and black"
+        }
+      ]
+    },
+    {
+      "title": "Department Volleyball Team",
+      "org": "Department of Mechanical and Electro-Mechanical Engineering, NSYSU",
+      "role": "Team captain (1 year)",
+      "summary": "I joined the department volleyball team in college and later served as captain, leading the team in many matches and organizing several tournaments. The team was runner-up in the Inter-Department Cup.",
+      "images": [
+        {
+          "file": "s09_Img_volley.jpg",
+          "alt": "Group photo of the department volleyball team in an indoor gym; two members in the center exchange a red envelope while the others sit behind them clapping"
+        }
+      ]
+    }
+  ],
+  "contact": {
+    "email": "cdtera2446890@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/%E5%85%86%E6%BA%90-tera-%E5%A7%9C-243b0a317/",
+    "makerworld": "https://makerworld.com/en/@cdtera2446890/upload",
+    "github": "https://github.com/tera0406"
+  },
+  "ui": {
+    "skip": "Skip to main content",
+    "switchTo": "中文",
+    "switchLabel": "Switch to Traditional Chinese",
+    "theme": "Toggle dark/light mode",
+    "print": "Print CV",
+    "nav": {
+      "about": "About",
+      "publications": "Publications",
+      "research": "Research",
+      "videos": "Videos",
+      "awards": "Awards",
+      "activities": "Misc"
+    },
+    "tb": {
+      "institution": "Institution",
+      "department": "Department",
+      "standing": "Standing",
+      "interests": "Research interests",
+      "next": "Exchange",
+      "sheet": "Sheet",
+      "drawing": "Dwg. no."
+    },
+    "labels": {
+      "education": "Education",
+      "exchange": "Exchange",
+      "role": "Role",
+      "period": "Period",
+      "org": "Organization",
+      "advisor": "Advisor",
+      "method": "Method",
+      "system": "System",
+      "contributions": "My contributions",
+      "team": "Team",
+      "design": "Design",
+      "challenges": "Challenges",
+      "results": "Results",
+      "reflection": "Reflection",
+      "abstract": "Abstract",
+      "showAbstract": "Abstract",
+      "status": "Status",
+      "year": "Year",
+      "venue": "Venue",
+      "title": "Title",
+      "watch": "Watch video",
+      "playVideo": "Play video",
+      "openYoutube": "Open on YouTube",
+      "abstractOnly": "Abstract only",
+      "figure": "Fig.",
+      "link": "Profile",
+      "more": "Details and figures",
+      "myRole": "My role",
+      "video": "Video"
+    },
+    "sections": {
+      "about": "About",
+      "research": "Research & Projects",
+      "publications": "Publications",
+      "awards": "Awards & Grants",
+      "videos": "Videos",
+      "skills": "Skills",
+      "activities": "Misc",
+      "contact": "Contact"
+    },
+    "contact": {
+      "email": "Email",
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "makerworld": "MakerWorld"
+    },
+    "updated": "Last updated",
+    "videoConsent": "The video loads from YouTube (youtube-nocookie.com) only after you click."
+  },
+  "updated": "2026-10"
+}
