@@ -56,7 +56,9 @@ const figId = (file: string) => `fig-${file.replace(/\W/g, '-')}`;
         <p class="inst">{c.hero.inst}</p>
         <ul class="icons">
           {links.map(([icon, label, href, printText]) => (
-            <li><a href={href} title={label} aria-label={label} data-print={printText} rel={href.startsWith('mailto') ? undefined : 'me noopener'}><Icon name={icon} /></a></li>
+            <li><a href={href} title={icon === 'mail' ? c.contact.email : label} aria-label={icon === 'mail' ? `${label}${COLON}${c.contact.email}` : label}
+                   data-print={printText} data-email={icon === 'mail' ? c.contact.email : undefined}
+                   rel={icon === 'mail' ? undefined : 'me noopener'}><Icon name={icon} /></a></li>
           ))}
         </ul>
         <div class="card interests">
@@ -239,6 +241,13 @@ const figId = (file: string) => `fig-${file.replace(/\W/g, '-')}`;
     </main>
   </div>
 
+  <!-- 點 Email 圖示時的提示：顯示信箱、已複製，並提供 Gmail 寄信連結 -->
+  <div class="toast" role="status" aria-live="polite" hidden data-copied={`${ui.labels.emailCopied}${COLON}`} data-label={`Email${COLON}`}>
+    <span class="toast-text"></span>
+    <a class="toast-gmail" href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(c.contact.email)}`} target="_blank" rel="noopener">{ui.labels.openGmail}</a>
+    <button class="toast-close" type="button" aria-label={ui.labels.close}>×</button>
+  </div>
+
   <footer class="footer">
     <div class="wrap">
       <span>© 2026 {c.meta.name}{SEP}{ui.updated} <span class="num">{c.updated}</span></span>
@@ -279,5 +288,25 @@ const figId = (file: string) => `fig-${file.replace(/\W/g, '-')}`;
       }
     };
     addEventListener('hashchange', openTarget); openTarget();
+
+    // Email：很多電腦沒有設定預設郵件程式，按 mailto 會沒反應。
+    // 所以點擊時同時複製信箱並顯示提示（含 Gmail 寄信連結）；有郵件程式的人照樣會開啟。
+    const toast = document.querySelector<HTMLElement>('.toast');
+    const toastText = toast?.querySelector<HTMLElement>('.toast-text');
+    let toastTimer: number | undefined;
+    document.querySelectorAll<HTMLAnchorElement>('[data-email]').forEach((a) => {
+      a.addEventListener('click', () => {
+        const email = a.dataset.email!;
+        const show = (copied: boolean) => {
+          if (!toast || !toastText) return;
+          toastText.textContent = `${copied ? toast.dataset.copied : toast.dataset.label}${email}`;
+          toast.hidden = false;
+          clearTimeout(toastTimer);
+          toastTimer = window.setTimeout(() => { toast.hidden = true; }, 8000);
+        };
+        navigator.clipboard?.writeText(email).then(() => show(true), () => show(false)) ?? show(false);
+      });
+    });
+    toast?.querySelector('.toast-close')?.addEventListener('click', () => { toast.hidden = true; });
   </script>
 </Base>
