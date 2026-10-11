@@ -351,10 +351,6 @@
       "org": "國家科學及技術委員會（計畫編號 115-2813-C-110-129-E）",
       "year": "2026",
       "note": "計畫名稱：結合多模態辨識與備援式 AI 決策機制之智慧分類垃圾桶研製；執行期間 2026/07 – 2027/02"
-    },
-    {
-      "title": "系際杯亞軍",
-      "org": "國立中山大學 機械與機電工程學系 系排球隊"
     }
   ],
   "videos": [
@@ -400,18 +396,6 @@
           "alt": "三個球形的 3D 列印卡牌收納盒，紅白、紫白與黃黑配色"
         }
       ]
-    },
-    {
-      "title": "系排球隊",
-      "org": "國立中山大學 機械與機電工程學系",
-      "role": "隊長（1 年）",
-      "summary": "加入系排球隊後擔任隊長一年，帶隊參賽並舉辦比賽；曾獲系際杯亞軍。",
-      "images": [
-        {
-          "file": "s09_Img_volley.jpg",
-          "alt": "系排球隊在室內體育館的團體照，中央兩位隊員交接紅包，其他隊員坐在後方鼓掌"
-        }
-      ]
     }
   ],
   "contact": {
@@ -427,6 +411,7 @@
     "print": "列印履歷",
     "nav": {
       "about": "關於我",
+      "experience": "經歷",
       "research": "研究與專案",
       "publications": "著作",
       "awards": "獲獎",
@@ -456,7 +441,8 @@
       "overview": "概述",
       "photos": "專案照片",
       "toProject": "專案介紹",
-      "interests": "研究興趣"
+      "interests": "研究興趣",
+      "seeProject": "專案介紹"
     },
     "sections": {
       "about": "關於我",
@@ -464,7 +450,8 @@
       "publications": "著作",
       "awards": "獲獎與計畫",
       "activities": "其他作品與活動",
-      "education": "學歷"
+      "education": "學歷",
+      "experience": "經歷"
     },
     "contact": {
       "email": "Email",
@@ -489,6 +476,21 @@
       "school": "新加坡南洋理工大學（NTU）",
       "detail": "修讀智慧製造與機器人相關課程",
       "badge": "2027/01 – 2027/05"
+    }
+  ],
+  "experience": [
+    {
+      "role": "UROP 研究實習生",
+      "org": "City Science Lab @ Taipei Tech",
+      "place": "國立臺北科技大學",
+      "period": "2026/07 – 2026/08",
+      "items": [
+        "在 MuJoCo 學習機械手臂的基礎：工作空間、動力學與阻抗力矩補償。",
+        "在實體機械手臂上嘗試系統辨識（system ID）。",
+        "參與三人團隊的 OpenArm 雙臂物品交接專案：VR 遙操作錄製示範、Isaac Lab Mimic 資料擴增、微調 SmolVLA，並在模擬與真機上評估。"
+      ],
+      "link": "openarm-bimanual",
+      "_src": "CV p.4（UROP 研究實習生，2026 年 7–8 月；MuJoCo 工作空間、動力學、阻抗力矩補償；實體手臂 system ID）；UROP 期末簡報（三人團隊）"
     }
   ]
 }

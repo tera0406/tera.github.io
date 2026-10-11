@@ -15,7 +15,7 @@ const ui = c.ui;
 const other: Lang = lang === 'zh' ? 'en' : 'zh';
 const SEP = lang === 'zh' ? '・' : ' · ';
 const COLON = lang === 'zh' ? '：' : ': ';
-const sections = ['about', 'research', 'publications', 'awards', 'activities'] as const;
+const sections = ['about', 'experience', 'research', 'publications', 'awards', 'activities'] as const;
 const videoById = Object.fromEntries(c.videos.map((v) => [v.youtubeId, v]));
 // [圖示, 名稱, 連結, 列印時顯示的文字]
 const links = [
@@ -84,6 +84,24 @@ const figId = (file: string) => `fig-${file.replace(/\W/g, '-')}`;
               </div>
               <p class="accent">{e.school}</p>
               <p class="muted">{e.detail}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section" id="experience" aria-labelledby="h-exp">
+        <h2 class="section-title" id="h-exp">{ui.sections.experience}</h2>
+        <div class="stack">
+          {c.experience.map((x) => (
+            <article class="card entry">
+              <div class="entry-head">
+                <h3>{x.role}</h3>
+                <span class="pill num">{x.period}</span>
+              </div>
+              <p class="accent">{x.org}</p>
+              <p class="muted small">{x.place}</p>
+              <ul class="exp-list">{x.items.map((i) => <li>{i}</li>)}</ul>
+              {x.link && <a class="small" href={`#${x.link}`}>→ {ui.labels.seeProject}</a>}
             </article>
           ))}
         </div>
