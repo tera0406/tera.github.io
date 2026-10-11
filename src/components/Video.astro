@@ -1,10 +1,15 @@
 ---
 // YouTube 延遲載入：先顯示縮圖，點了才載入 youtube-nocookie.com 的播放器。
 // 沒有 JavaScript 時，播放按鈕本身就是 YouTube 連結。
-interface Props { id: string; title: string; label: string }
-const { id, title, label } = Astro.props;
+// poster：專案照片，當 YouTube 縮圖載入失敗時顯示，避免出現黑框。
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props { id: string; title: string; label: string; poster?: ImageMetadata }
+const { id, title, label, poster } = Astro.props;
 ---
 <div class="video-frame" data-yt={id} data-title={title}>
+  {poster && <Image class="poster" src={poster} alt="" widths={[480, 800]} sizes="(max-width: 700px) 100vw, 360px" loading="lazy" />}
   <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" width="480" height="360" loading="lazy" decoding="async" onerror="this.remove()" />
   <a class="video-play" href={`https://www.youtube.com/watch?v=${id}`} aria-label={label} data-play>
     <span aria-hidden="true">
