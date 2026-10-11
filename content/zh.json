@@ -442,7 +442,10 @@
       "photos": "專案照片",
       "toProject": "專案介紹",
       "interests": "研究興趣",
-      "seeProject": "專案介紹"
+      "seeProject": "專案介紹",
+      "emailCopied": "已複製信箱",
+      "openGmail": "用 Gmail 寄信",
+      "close": "關閉"
     },
     "sections": {
       "about": "關於我",

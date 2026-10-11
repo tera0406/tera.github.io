@@ -441,7 +441,10 @@
       "photos": "Project photos",
       "toProject": "Project",
       "interests": "Research Interests",
-      "seeProject": "See project"
+      "seeProject": "See project",
+      "emailCopied": "Email copied",
+      "openGmail": "Write in Gmail",
+      "close": "Close"
     },
     "sections": {
       "about": "About",
