@@ -17,11 +17,9 @@
       "Sim-to-real",
       "學習式策略與控制的結合"
     ],
-    "summary": "我就讀國立中山大學機械與機電工程學系四年級，做過多模態智慧分類垃圾桶（國科會大專學生研究計畫，擔任專題組長）與 TEL Robot Combat 射球機器人（擔任隊長），2026 年暑假在臺北科大 City Science Lab 實習，參與 OpenArm 雙臂模仿學習。研究所希望把控制理論補紮實，弄清楚模擬中學到的策略如何穩定地用到真機上。",
-    "institution": "國立中山大學",
-    "department": "機械與機電工程學系",
-    "standing": "大學部四年級",
-    "next": "新加坡南洋理工大學（NTU）・2027 年 1–5 月"
+    "summary": "我是**國立中山大學機械與機電工程學系**四年級學生，2027 年 1–5 月將赴**新加坡南洋理工大學（NTU）**交換。我關注**機器人操作與控制**，希望弄清楚模擬中學到的策略，如何穩定地用到真機上。",
+    "role": "大學部四年級",
+    "inst": "國立中山大學・機械與機電工程學系"
   },
   "research": [
     {
@@ -428,19 +426,11 @@
     "theme": "切換深色／淺色模式",
     "print": "列印履歷",
     "nav": {
-      "about": "簡介",
-      "publications": "著作",
+      "about": "關於我",
       "research": "研究與專案",
-      "videos": "影片",
+      "publications": "著作",
       "awards": "獲獎",
       "activities": "其他"
-    },
-    "tb": {
-      "institution": "學校",
-      "department": "系所",
-      "standing": "年級",
-      "interests": "研究興趣",
-      "next": "交換計畫"
     },
     "labels": {
       "advisor": "指導老師",
@@ -465,15 +455,16 @@
       "next": "後續方向",
       "overview": "概述",
       "photos": "專案照片",
-      "toProject": "專案介紹"
+      "toProject": "專案介紹",
+      "interests": "研究興趣"
     },
     "sections": {
-      "about": "簡介",
+      "about": "關於我",
       "research": "研究與專案",
       "publications": "著作",
       "awards": "獲獎與計畫",
-      "videos": "影片",
-      "activities": "其他作品與活動"
+      "activities": "其他作品與活動",
+      "education": "學歷"
     },
     "contact": {
       "email": "Email",
@@ -482,8 +473,22 @@
       "makerworld": "MakerWorld"
     },
     "updated": "最後更新",
-    "videoConsent": "點選後才會從 YouTube（youtube-nocookie.com）載入影片。",
+    "videoConsent": "影片點選後才會從 YouTube（youtube-nocookie.com）載入。",
     "switchLabel": "切換為英文版"
   },
-  "updated": "2026-10"
+  "updated": "2026-10",
+  "education": [
+    {
+      "degree": "學士（就讀中）",
+      "school": "國立中山大學",
+      "detail": "機械與機電工程學系・大學部四年級",
+      "badge": "就讀中"
+    },
+    {
+      "degree": "交換學生",
+      "school": "新加坡南洋理工大學（NTU）",
+      "detail": "修讀智慧製造與機器人相關課程",
+      "badge": "2027/01 – 2027/05"
+    }
+  ]
 }

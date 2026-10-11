@@ -22,6 +22,12 @@ export function img(file: string): ImageMetadata {
   return hit[1].default;
 }
 
+// 內容檔裡用 **文字** 標示粗體；其他 HTML 一律跳脫，避免內容被當成程式碼執行。
+export function rich(text: string): string {
+  const escaped = text.replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]!);
+  return escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
 export function pageUrl(lang: Lang): string {
   return `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${lang}/`;
 }

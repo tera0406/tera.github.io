@@ -2,7 +2,8 @@
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Video from '../../components/Video.astro';
-import { content, img, pageUrl, LANGS, type Lang } from '../../lib/content';
+import Icon from '../../components/Icon.astro';
+import { content, img, pageUrl, rich, LANGS, type Lang } from '../../lib/content';
 
 export function getStaticPaths() {
   return LANGS.map((lang) => ({ params: { lang } }));
@@ -14,15 +15,16 @@ const ui = c.ui;
 const other: Lang = lang === 'zh' ? 'en' : 'zh';
 const SEP = lang === 'zh' ? '・' : ' · ';
 const COLON = lang === 'zh' ? '：' : ': ';
-const sections = ['about', 'publications', 'research', 'videos', 'awards', 'activities'] as const;
-const projectById = Object.fromEntries(c.research.map((r) => [r.id, r]));
-// [顯示文字, 連結, 列印時顯示的網址]
+const sections = ['about', 'research', 'publications', 'awards', 'activities'] as const;
+const videoById = Object.fromEntries(c.videos.map((v) => [v.youtubeId, v]));
+// [圖示, 名稱, 連結, 列印時顯示的文字]
 const links = [
-  [ui.contact.email, `mailto:${c.contact.email}`, c.contact.email],
-  [ui.contact.linkedin, c.contact.linkedin, 'linkedin.com/in/…243b0a317'],
-  [ui.contact.github, c.contact.github, 'github.com/tera0406'],
-  [ui.contact.makerworld, c.contact.makerworld, 'makerworld.com/@cdtera2446890'],
+  ['mail', ui.contact.email, `mailto:${c.contact.email}`, c.contact.email],
+  ['linkedin', ui.contact.linkedin, c.contact.linkedin, 'linkedin.com/in/…243b0a317'],
+  ['github', ui.contact.github, c.contact.github, 'github.com/tera0406'],
+  ['box', ui.contact.makerworld, c.contact.makerworld, 'makerworld.com/@cdtera2446890'],
 ] as const;
+const figId = (file: string) => `fig-${file.replace(/\W/g, '-')}`;
 ---
 <Base lang={lang} c={c}>
   <a class="skip-link" href="#main">{ui.skip}</a>
@@ -43,178 +45,185 @@ const links = [
     </div>
   </header>
 
-  <main id="main" tabindex="-1">
-    <!-- ===== 簡介 ===== -->
-    <div class="wrap">
-      <section class="hero" id="about" aria-labelledby="h-name">
-        <div class="hero-text">
-          <h1 id="h-name">{c.meta.name}</h1>
-          <p class="alt" lang={lang === 'en' ? 'zh-Hant-TW' : 'en'}>{c.meta.nameAlt}</p>
-          <p class="affil">{lang === 'zh'
-            ? `${c.hero.institution} ${c.hero.department}・${c.hero.standing}`
-            : `${c.hero.standing}, ${c.hero.department}, ${c.hero.institution}`}</p>
-          <p class="bio">{c.hero.summary}</p>
-          <p class="interests-line"><span class="k">{ui.tb.interests}</span>
-            <span class="interests">{c.hero.interests.join(SEP)}</span>
-          </p>
-          <p class="next"><span class="k">{ui.tb.next}</span> {c.hero.next}</p>
-          <p class="links">
-            {links.map(([label, href, printText]) => <a href={href} data-print={printText} rel={href.startsWith('mailto') ? undefined : 'me noopener'}>{label}</a>)}
-          </p>
+  <div class="wrap layout">
+    <!-- ===== 左側個人欄 ===== -->
+    <aside class="profile" aria-label={lang === 'zh' ? '個人資料' : 'Profile'}>
+      <div class="profile-inner">
+        <Image class="avatar" src={img(c.meta.photo.file)} alt={c.meta.photo.alt} widths={[240, 480]} sizes="240px" loading="eager" fetchpriority="high" />
+        <h1 class="name">{c.meta.name}</h1>
+        <p class="name-alt" lang={lang === 'en' ? 'zh-Hant-TW' : 'en'}>{c.meta.nameAlt}</p>
+        <p class="role">{c.hero.role}</p>
+        <p class="inst">{c.hero.inst}</p>
+        <ul class="icons">
+          {links.map(([icon, label, href, printText]) => (
+            <li><a href={href} title={label} aria-label={label} data-print={printText} rel={href.startsWith('mailto') ? undefined : 'me noopener'}><Icon name={icon} /></a></li>
+          ))}
+        </ul>
+        <div class="card interests">
+          <h2>{ui.labels.interests}</h2>
+          <ul>{c.hero.interests.map((i) => <li>{i}</li>)}</ul>
         </div>
-        <div class="hero-photo">
-          <Image src={img(c.meta.photo.file)} alt={c.meta.photo.alt} widths={[240, 480]} sizes="(max-width: 760px) 160px, 240px" loading="eager" fetchpriority="high" />
-        </div>
-      </section>
-    </div>
+      </div>
+    </aside>
 
-    <div class="wrap">
-      <!-- ===== 著作 ===== -->
-      <section class="section" id="publications" aria-labelledby="h-pubs">
-        <div class="section-head"><h2 id="h-pubs">{ui.sections.publications}</h2></div>
-        <table class="pubs">
-          <thead class="visually-hidden"><tr><th class="k y">{ui.labels.year}</th><th class="k">{ui.labels.title}</th><th class="k s">{ui.labels.status}</th></tr></thead>
-          <tbody>
-            {c.publications.map((p) => (
-              <tr>
-                <td class="y num">{p.year}</td>
-                <td>
-                  <span class="pub-title" lang={/[一-鿿]/.test(p.title) ? 'zh-Hant-TW' : 'en'}>{p.title}</span>
-                  {p.titleEn && <span class="pub-title-alt" lang="en">{p.titleEn}</span>}
-                  <span class="pub-venue">{p.type}{SEP}{p.venue}</span>
-                  <details>
-                    <summary>{ui.labels.showAbstract}<span class="visually-hidden">{COLON}{p.title}</span></summary>
-                    <p>{p.abstract}</p>
-                  </details>
-                  {p.note && <span class="note">{p.note}</span>}
-                </td>
-                <td class="s">
-                  {p.status && <span class:list={['chip', p.statusKind]}>{p.status}</span>}
-                  {p.date && <div class="note num">{p.date}</div>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <!-- ===== 右側內容 ===== -->
+    <main id="main" tabindex="-1" class="content">
+      <section class="section" id="about" aria-labelledby="h-about">
+        <h2 class="section-title" id="h-about">{ui.sections.about}</h2>
+        <p class="bio" set:html={rich(c.hero.summary)} />
       </section>
 
-      <!-- ===== 研究與專案 ===== -->
+      <section class="section" id="education" aria-labelledby="h-edu">
+        <h2 class="section-title" id="h-edu">{ui.sections.education}</h2>
+        <div class="stack">
+          {c.education.map((e) => (
+            <article class="card entry">
+              <div class="entry-head">
+                <h3>{e.degree}</h3>
+                <span class="pill num">{e.badge}</span>
+              </div>
+              <p class="accent">{e.school}</p>
+              <p class="muted">{e.detail}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section class="section" id="research" aria-labelledby="h-research">
-        <div class="section-head"><h2 id="h-research">{ui.sections.research}</h2></div>
-        {c.research.map((r) => (
-          <article class="project" id={r.id} aria-labelledby={`t-${r.id}`}>
-            <div class="proj-grid">
-              <div class="thumb">
-                <Image src={img(r.thumb)} alt={r.thumbAlt} widths={[320, 640]} sizes="(max-width: 700px) 100vw, 300px" loading="lazy" />
-              </div>
-              <div class="proj-text">
-                <span class="cat num">{[r.category, r.period].filter(Boolean).join(SEP)}</span>
-                <h3 id={`t-${r.id}`}>{r.title}</h3>
-                <p class="org">{r.org}</p>
-                <p class="summary">{r.summary}</p>
-                <p class="role"><span class="k">{ui.labels.myRole}</span> {r.brief}</p>
-                {r.video && <a class="btn watch" href={`#video-${r.video.youtubeId}`}><span aria-hidden="true">▶</span> {ui.labels.video}<span class="visually-hidden">{COLON}{r.title}</span></a>}
-              </div>
-            </div>
-            {/* 照片列：點照片會展開下方的詳細內容並捲到該張圖 */}
-            {r.images?.filter((im) => im.file !== r.thumb).length > 0 && (
-              <ul class="strip" aria-label={ui.labels.photos}>
-                {r.images.filter((im) => im.file !== r.thumb).slice(0, 4).map((im) => (
-                  <li><a href={`#fig-${im.file.replace(/\W/g, '-')}`}>
-                    <Image src={img(im.file)} alt={im.caption} widths={[240, 480]} sizes="240px" loading="lazy" />
-                  </a></li>
-                ))}
-              </ul>
-            )}
-            <details class="more">
-              <summary>{ui.labels.more}<span class="visually-hidden">{COLON}{r.title}</span></summary>
-              <div class="more-body">
-                <p class="overview">{r.overview}</p>
-                <p class="org-full">{r.orgFull}</p>
-                <div class="more-grid">
-                  {r.method && <div><h4>{ui.labels.method}</h4><ul>{r.method.map((m) => <li>{m}</li>)}</ul></div>}
-                  {r.system && <div><h4>{ui.labels.system}</h4><p>{r.system}</p></div>}
-                  {r.design && <div><h4>{ui.labels.design}</h4><ul>{r.design.map((m) => <li>{m}</li>)}</ul></div>}
-                  {r.contributions?.length > 0 && <div><h4>{ui.labels.contributions}</h4><ul>{r.contributions.map((m) => <li>{m}</li>)}</ul></div>}
-                  {r.team && <div><h4>{ui.labels.team}</h4><p>{r.team}</p></div>}
-                  {r.results?.length > 0 && <div><h4>{ui.labels.results}</h4><ul class="num">{r.results.map((m) => <li>{m}</li>)}</ul></div>}
-                  {r.challenges && <div><h4>{ui.labels.challenges}</h4><ul>{r.challenges.map((m) => <li>{m}</li>)}</ul></div>}
-                  {r.next && <div><h4>{ui.labels.next}</h4><ul>{r.next.map((m) => <li>{m}</li>)}</ul></div>}
-                  {r.reflection && <div><h4>{ui.labels.reflection}</h4><p>{r.reflection}</p></div>}
+        <h2 class="section-title" id="h-research">{ui.sections.research}</h2>
+        <div class="stack">
+          {c.research.map((r) => {
+            const others = (r.images ?? []).filter((im) => im.file !== r.thumb);
+            const v = r.video && videoById[r.video.youtubeId];
+            return (
+              <article class="card project" id={r.id} aria-labelledby={`t-${r.id}`}>
+                <div class="entry-head">
+                  <h3 id={`t-${r.id}`}>{r.title}</h3>
+                  <span class="pill">{r.category}</span>
                 </div>
-                {r.images?.length > 0 && (
-                  <div class="figs">
-                    {r.images.map((im) => (
-                      <figure class:list={{ wide: im.wide }} id={`fig-${im.file.replace(/\W/g, '-')}`}>
-                        <Image src={img(im.file)} alt={im.alt} widths={im.wide ? [560, 1040] : [280, 560]}
-                               sizes={im.wide ? '(max-width: 860px) 100vw, 520px' : '(max-width: 860px) 50vw, 250px'} loading="lazy" />
-                        <figcaption>{im.caption}</figcaption>
-                      </figure>
-                    ))}
-                  </div>
-                )}
+                <p class="accent">{r.org}</p>
+                {r.period && <p class="muted small num">{r.period}</p>}
+                <p class="summary">{r.summary}</p>
+                <p class="role-line"><strong>{ui.labels.myRole}{COLON}</strong>{r.brief}</p>
                 <ul class="tags">{r.tags.map((t) => <li>{t}</li>)}</ul>
+
+                <div class:list={['media', { 'has-video': !!v }]}>
+                  {v ? (
+                    <div class="media-main" id={`video-${v.youtubeId}`}>
+                      <Video id={v.youtubeId} title={v.title} label={`${ui.labels.playVideo}${COLON}${v.title}`} poster={img(r.thumb)} />
+                    </div>
+                  ) : (
+                    <div class="media-main">
+                      <Image class="media-img" src={img(r.thumb)} alt={r.thumbAlt} widths={[480, 960]} sizes="(max-width: 700px) 100vw, 420px" loading="lazy" />
+                    </div>
+                  )}
+                  {others.length > 0 && (
+                    <ul class="media-grid" aria-label={ui.labels.photos}>
+                      {others.slice(0, 4).map((im) => (
+                        <li><a href={`#${figId(im.file)}`}>
+                          <Image src={img(im.file)} alt={im.caption} widths={[240, 480]} sizes="160px" loading="lazy" />
+                        </a></li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                <details class="more">
+                  <summary>{ui.labels.more}<span class="visually-hidden">{COLON}{r.title}</span></summary>
+                  <div class="more-body">
+                    <p>{r.overview}</p>
+                    <p class="muted small">{r.orgFull}</p>
+                    <div class="more-grid">
+                      {r.method && <div><h4>{ui.labels.method}</h4><ul>{r.method.map((m) => <li>{m}</li>)}</ul></div>}
+                      {r.system && <div><h4>{ui.labels.system}</h4><p>{r.system}</p></div>}
+                      {r.design && <div><h4>{ui.labels.design}</h4><ul>{r.design.map((m) => <li>{m}</li>)}</ul></div>}
+                      {r.contributions?.length > 0 && <div><h4>{ui.labels.contributions}</h4><ul>{r.contributions.map((m) => <li>{m}</li>)}</ul></div>}
+                      {r.team && <div><h4>{ui.labels.team}</h4><p>{r.team}</p></div>}
+                      {r.results?.length > 0 && <div><h4>{ui.labels.results}</h4><ul class="num">{r.results.map((m) => <li>{m}</li>)}</ul></div>}
+                      {r.challenges && <div><h4>{ui.labels.challenges}</h4><ul>{r.challenges.map((m) => <li>{m}</li>)}</ul></div>}
+                      {r.next && <div><h4>{ui.labels.next}</h4><ul>{r.next.map((m) => <li>{m}</li>)}</ul></div>}
+                      {r.reflection && <div><h4>{ui.labels.reflection}</h4><p>{r.reflection}</p></div>}
+                    </div>
+                    {r.images?.length > 0 && (
+                      <div class="figs">
+                        {r.images.map((im) => (
+                          <figure class:list={{ wide: im.wide }} id={figId(im.file)}>
+                            <Image src={img(im.file)} alt={im.alt} widths={im.wide ? [560, 1040] : [280, 560]}
+                                   sizes={im.wide ? '(max-width: 860px) 100vw, 480px' : '(max-width: 860px) 50vw, 240px'} loading="lazy" />
+                            <figcaption>{im.caption}</figcaption>
+                          </figure>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </details>
+              </article>
+            );
+          })}
+        </div>
+        <p class="muted small video-note">{ui.videoConsent}</p>
+      </section>
+
+      <section class="section" id="publications" aria-labelledby="h-pubs">
+        <h2 class="section-title" id="h-pubs">{ui.sections.publications}</h2>
+        <div class="stack">
+          {c.publications.map((p) => (
+            <article class="card entry pub">
+              <div class="entry-head">
+                <h3 lang={/[一-鿿]/.test(p.title) ? 'zh-Hant-TW' : 'en'}>{p.title}</h3>
+                {p.status && <span class:list={['pill', p.statusKind]}>{p.status}</span>}
               </div>
-            </details>
-          </article>
-        ))}
-      </section>
-
-      <!-- ===== 影片 ===== -->
-      <section class="section" id="videos" aria-labelledby="h-videos">
-        <div class="section-head"><h2 id="h-videos">{ui.sections.videos}</h2></div>
-        <div class="videos">
-          {c.videos.map((v) => (
-            <figure class="video" id={`video-${v.youtubeId}`}>
-              <Video id={v.youtubeId} title={v.title} label={`${ui.labels.playVideo}${COLON}${v.title}`}
-                     poster={projectById[v.relatedProject] ? img(projectById[v.relatedProject].thumb) : undefined} />
-              <figcaption>
-                <span class="t">{v.title}</span>
-                <span class="c">{v.caption}</span>
-                {projectById[v.relatedProject] && <> <a href={`#${v.relatedProject}`}>→ {ui.labels.toProject}<span class="visually-hidden">{COLON}{projectById[v.relatedProject].title}</span></a></>}
-              </figcaption>
-            </figure>
+              {p.titleEn && <p class="muted small" lang="en">{p.titleEn}</p>}
+              <p class="accent">{p.type}{SEP}{p.venue}</p>
+              <p class="muted small num">{p.date ?? p.year}</p>
+              {p.note && <p class="muted small">{p.note}</p>}
+              <details class="abstract">
+                <summary>{ui.labels.showAbstract}<span class="visually-hidden">{COLON}{p.title}</span></summary>
+                <p>{p.abstract}</p>
+              </details>
+            </article>
           ))}
         </div>
-        <p class="note">{ui.videoConsent}</p>
       </section>
 
-      <!-- ===== 獲獎與計畫 ===== -->
       <section class="section" id="awards" aria-labelledby="h-awards">
-        <div class="section-head"><h2 id="h-awards">{ui.sections.awards}</h2></div>
-        <div class="ledger">
+        <h2 class="section-title" id="h-awards">{ui.sections.awards}</h2>
+        <div class="stack">
           {c.awards.map((a) => (
-            <div>
-              <div class="num">{a.year}</div>
-              <div><div class="t">{a.title}</div><div class="sub">{a.org}</div>{a.note && <div class="sub">{a.note}</div>}</div>
-            </div>
+            <article class="card entry">
+              <div class="entry-head">
+                <h3>{a.title}</h3>
+                {a.year && <span class="pill num">{a.year}</span>}
+              </div>
+              <p class="accent">{a.org}</p>
+              {a.note && <p class="muted small">{a.note}</p>}
+            </article>
           ))}
         </div>
       </section>
 
-      <!-- ===== 其他 ===== -->
       <section class="section" id="activities" aria-labelledby="h-acts">
-        <div class="section-head"><h2 id="h-acts">{ui.sections.activities}</h2></div>
+        <h2 class="section-title" id="h-acts">{ui.sections.activities}</h2>
         <div class="acts">
           {c.activities.map((a) => (
-            <article class="act">
-              {a.images?.[0] && <Image src={img(a.images[0].file)} alt={a.images[0].alt} widths={[360, 720]} sizes="(max-width: 700px) 100vw, 360px" loading="lazy" />}
-              <div class="body">
+            <article class="card act">
+              {a.images?.[0] && <Image src={img(a.images[0].file)} alt={a.images[0].alt} widths={[360, 720]} sizes="(max-width: 700px) 100vw, 300px" loading="lazy" />}
+              <div class="act-body">
                 <h3>{a.title}</h3>
-                <div class="sub">{a.org}{a.role && `${SEP}${a.role}`}</div>
-                <p>{a.summary}</p>
-                {a.link && <a href={a.link} rel="noopener">{ui.labels.link} ↗</a>}
+                <p class="accent small">{a.org}{a.role && `${SEP}${a.role}`}</p>
+                <p class="small">{a.summary}</p>
+                {a.link && <a class="small" href={a.link} rel="noopener">{ui.labels.link} ↗</a>}
               </div>
             </article>
           ))}
         </div>
       </section>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <footer class="footer">
     <div class="wrap">
-      <span>© 2026 {c.meta.name}{SEP}{ui.updated} <span class="num">{c.updated}</span>{SEP}<a href={`mailto:${c.contact.email}`}>{c.contact.email}</a></span>
+      <span>© 2026 {c.meta.name}{SEP}{ui.updated} <span class="num">{c.updated}</span></span>
       <span class="tools"><button class="btn" type="button" onclick="window.print()">{ui.print}</button></span>
     </div>
   </footer>
@@ -241,15 +250,14 @@ const links = [
       try { localStorage.setItem('theme', root.dataset.theme); } catch {}
       sync();
     });
-    // 連到專案或專案裡的圖片時，自動展開該專案的詳細內容。
+    // 連到專案裡的圖片時，自動展開該專案的詳細內容。
     const openTarget = () => {
       if (!location.hash) return;
       const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-      if (!el) return;
-      const details = el.closest('details') ?? el.querySelector('details.more');
-      if (details && !details.open) {
+      const details = el?.closest('details');
+      if (el && details && !details.open) {
         details.open = true;
-        if (el.closest('details')) el.scrollIntoView({ block: 'center' });
+        el.scrollIntoView({ block: 'center' });
       }
     };
     addEventListener('hashchange', openTarget); openTarget();

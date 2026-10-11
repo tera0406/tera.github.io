@@ -17,11 +17,9 @@
       "Sim-to-real transfer",
       "Learning-based policies with control"
     ],
-    "summary": "I am a fourth-year undergraduate in the Department of Mechanical and Electro-Mechanical Engineering at NSYSU. I led a team project on a multimodal smart waste-sorting bin, approved as a National Science and Technology Council (NSTC) college student research project, and captained our ball-shooting robot team at TEL Robot Combat. In summer 2026, I interned at City Science Lab @ Taipei Tech, where I worked on bimanual imitation learning with OpenArm. In graduate school, I plan to build a solid foundation in control theory and to understand how policies learned in simulation can be transferred reliably to physical robots.",
-    "institution": "National Sun Yat-sen University",
-    "department": "Mechanical & Electro-Mechanical Eng.",
-    "standing": "B.S., fourth year",
-    "next": "NTU Singapore · Jan.–May 2027"
+    "summary": "I am a fourth-year undergraduate in **Mechanical and Electro-Mechanical Engineering** at **National Sun Yat-sen University**, and will be an exchange student at **NTU Singapore** from January to May 2027. I am interested in **robot manipulation and control**, especially how policies learned in simulation can transfer reliably to real robots.",
+    "role": "B.S. Student (4th year)",
+    "inst": "National Sun Yat-sen University"
   },
   "research": [
     {
@@ -428,18 +426,10 @@
     "print": "Print CV",
     "nav": {
       "about": "About",
-      "publications": "Publications",
       "research": "Research",
-      "videos": "Videos",
+      "publications": "Publications",
       "awards": "Awards",
       "activities": "Other"
-    },
-    "tb": {
-      "institution": "Institution",
-      "department": "Department",
-      "standing": "Standing",
-      "interests": "Research interests",
-      "next": "Exchange"
     },
     "labels": {
       "advisor": "Advisor",
@@ -464,15 +454,16 @@
       "next": "Future work",
       "overview": "Overview",
       "photos": "Project photos",
-      "toProject": "Project"
+      "toProject": "Project",
+      "interests": "Research Interests"
     },
     "sections": {
       "about": "About",
       "research": "Research & Projects",
       "publications": "Publications",
       "awards": "Awards & Grants",
-      "videos": "Videos",
-      "activities": "Other Work & Activities"
+      "activities": "Other Work & Activities",
+      "education": "Education"
     },
     "contact": {
       "email": "Email",
@@ -481,8 +472,22 @@
       "makerworld": "MakerWorld"
     },
     "updated": "Last updated",
-    "videoConsent": "The video loads from YouTube (youtube-nocookie.com) only after you click.",
+    "videoConsent": "Videos load from YouTube (youtube-nocookie.com) only after you click.",
     "switchLabel": "Switch to Traditional Chinese"
   },
-  "updated": "2026-10"
+  "updated": "2026-10",
+  "education": [
+    {
+      "degree": "B.S. (in progress)",
+      "school": "National Sun Yat-sen University (NSYSU)",
+      "detail": "Department of Mechanical and Electro-Mechanical Engineering · fourth year",
+      "badge": "Current"
+    },
+    {
+      "degree": "Exchange student",
+      "school": "Nanyang Technological University (NTU), Singapore",
+      "detail": "Courses in smart manufacturing and robotics",
+      "badge": "Jan. – May 2027"
+    }
+  ]
 }
