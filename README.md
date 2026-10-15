@@ -2,103 +2,200 @@
 
 中英雙語的個人學術網站，用 [Astro](https://astro.build/) 建置，透過 GitHub Actions 自動部署到 GitHub Pages。
 
-- 英文版：<https://tera0406.github.io/en/>
-- 中文版：<https://tera0406.github.io/zh/>
-- 根網址 <https://tera0406.github.io/> 會依「上次選的語言」或「瀏覽器語言」自動轉到對應版本。
+- 網址：<https://tera0406.github.io/>（中文 `/zh/`、英文 `/en/`；根網址會依上次選擇或瀏覽器語言自動轉址）
+- Repo：`tera0406/tera0406.github.io`（原名 `tera0406/resume`，GitHub 會自動轉址）
+
+> **給 Claude（或其他 AI 助理）**：請先讀完第 2 節「維護手冊」再動手。裡面有內容規則、隱私禁區、資料格式，以及新增或更新專案的標準流程。
 
 ---
 
-## 1. 在本機預覽
-
-需要 [Node.js](https://nodejs.org/) 22 版以上。
+## 1. 給本人：快速上手
 
 ```bash
-npm install        # 第一次才需要，安裝套件
-npm run dev        # 啟動預覽伺服器
+npm install            # 第一次才需要
+npm run dev            # 本機預覽 http://localhost:4321/
+npm run check:content  # 改完內容先檢查
+npm run build          # 建置到 dist/（部署前 CI 也會跑）
 ```
 
-打開終端機顯示的網址（通常是 <http://localhost:4321/>）。改了檔案存檔後，瀏覽器會自動更新。
+- 改文字：只要改 `content/zh.json` 和 `content/en.json`，兩個檔案的結構要一模一樣。
+- 加圖片：放進 `src/assets/img/`，在 JSON 裡用檔名引用。
+- 上線：推到 `main` 就會自動部署，約 1～2 分鐘完成。進度可以在 GitHub repo 的 **Actions** 分頁查看。
 
-要看「正式部署後」的樣子：
+---
 
-```bash
-npm run build      # 建置到 dist/
-npm run preview    # 預覽 dist/
-```
+## 2. 維護手冊（給 Claude）
 
-## 2. 改內容（不用碰程式）
+### 2.1 專案結構
 
-網站上所有文字都在這兩個檔案：
-
-| 檔案 | 內容 |
+| 路徑 | 用途 |
 |---|---|
-| `content/zh.json` | 中文版 |
-| `content/en.json` | 英文版 |
+| `content/zh.json`、`content/en.json` | **所有網站文字**。中英文結構必須完全一致（key、陣列長度、順序） |
+| `src/assets/img/` | 網站用的圖片。建置時 Astro 會自動轉成 WebP、產生多種尺寸 |
+| `src/pages/[lang]/index.astro` | 主頁面模板：左側個人欄＋右側各區塊 |
+| `src/pages/index.astro` | 根網址的語言轉址 |
+| `src/pages/404.astro`、`src/pages/sitemap.xml.ts` | 404 頁面、sitemap |
+| `src/layouts/Base.astro` | `<head>`：SEO、hreflang、Open Graph、字型、JSON-LD |
+| `src/components/Video.astro` | YouTube 延遲載入（youtube-nocookie，點了才載入；`poster` 是預覽圖） |
+| `src/components/Icon.astro` | 左欄的圖示（Lucide：mail／linkedin／github／box） |
+| `src/lib/content.ts` | 讀取 JSON、`img(檔名)`、`rich()`（`**粗體**` 轉 `<strong>`，其他 HTML 一律跳脫） |
+| `src/styles/global.css` | 全部樣式。顏色變數在開頭的 `:root`，深色模式緊接在後，列印樣式在最後 |
+| `scripts/check-content.mjs` | 內容檢查，CI 部署前會跑，失敗就不會部署 |
+| `public/og-zh.png`、`public/og-en.png` | 社群分享預覽圖（1200×630） |
+| `astro.config.mjs` | 依 `GITHUB_REPOSITORY` 自動決定 `base`：repo 名稱是 `帳號.github.io` 時用 `/` |
+| `.github/workflows/deploy.yml` | push 到 `main` 時依序執行 `npm ci` → `check:content` → `build` → 部署 |
 
-兩個檔案的**結構要一模一樣**，只有文字不同。改一邊時，記得另一邊也要改。
+頁面區塊順序：左欄（頭貼、姓名、身分、圖示連結、研究興趣）→ 右側依序是關於我、學歷、經歷、研究與專案、著作、獲獎與計畫、其他作品與活動。
 
-### 常見修改
+### 2.2 內容規則（本人已確認，務必遵守）
 
-- **簡介、研究興趣**：`hero` 底下的 `summary`、`interests`。
-- **新增論文**：在 `publications` 陣列加一筆，可以複製現有的一筆來改。
-  - `statusKind` 決定狀態標籤的顏色：`review` 是黃色（審查中），`ok` 是藍色（已接受），`plain` 是無色。
-  - 論文正式刊出後，把 `status` 改成「已刊出／Published」，並在 `venue` 加上 DOI。
-- **新增專案**：在 `research` 陣列加一筆。
-  - 必填：`id`（英文、不要有空白）、`category`、`title`、`org`、`summary`、`brief`（我的角色）、`tags`、`thumb`（代表圖）、`thumbAlt`（代表圖的替代文字）。
-  - 其他欄位都可以省略，例如 `method`、`results`、`challenges`、`next`、`images`、`video`。
-- **新增影片**：在 `videos` 陣列加一筆。`youtubeId` 是 YouTube 網址 `watch?v=` 後面那 11 個字元。不要把影片檔放進 repo。
-- **聯絡方式**：`contact`。
-- **最後更新日期**：`updated`。
-- **介面文字**（按鈕、區塊標題等）：`ui`。
+1. **只寫有出處的事實。** 數字、日期、獎項、角色都要能在本人提供的資料裡找到，例如 CV、論文、簡報。不確定就問本人，**不要自己補寫或美化**，也不要留 `TODO`，因為 CI 會擋下來。
+2. **角色照實寫。** 團隊專案用「我們／we」，本人負責的部分才寫「我／I」。已確認的分工：
+   - **智慧分類垃圾桶**：本人是組長，負責機電整合，以及 PC、樹莓派、ESP32 之間的通訊；機構和核心 AI 模型由組員負責。
+   - **OpenArm**：三人團隊。本人要求只寫「我們」，**不要細分誰做了什麼**。
+   - **TEL Robot Combat**：本人是隊長，負責硬體架構與全機機構設計；軟體和 AI 由隊友負責。
+3. **中文用台灣用語與繁體字**（資訊、網路、最佳化、呼叫；不用信息、網絡、優化、調用）。語氣平實，不要用「首創」「顛覆」這類詞。
+4. **英文用正式學術語氣**，專有名詞前後一致，例如 system identification、sim-to-real、imitation learning、SmolVLA、Isaac Lab Mimic。英文要重新寫成英文的寫法，不是逐字翻譯。
+5. **論文**：
+   - 只放摘要，**不放全文 PDF**，**不列作者與作者順序**。
+   - IEEE Access 那篇標示「審查中 / Under review」。題目以 PDF 內文的版本為準：*…Design and Evaluation on a Physical Prototype*。
+6. **隱私禁區**（`check-content.mjs` 會自動擋其中一部分）：
+   - 不放 GPA、班排、IELTS／TOEIC 分數、學號、電話、地址、學校信箱。
+   - 不放未公開的夾爪（UMI）專案，任何字樣都不行。
+   - 不放 Thingiverse 帳號名稱（帳號名會透露生日）。
+   - 不放排球隊相關內容（本人要求拿掉）。
+   - 不要 commit 原始申請文件，例如 pptx、docx、論文 PDF、證明文件、推薦信，`.gitignore` 已經擋掉。
+   - 公開的聯絡方式只有：`cdtera2446890@gmail.com`、LinkedIn、GitHub `tera0406`、MakerWorld。
+7. **Pokémon 卡盒**只寫設計，**不提販售**，標題用中性名稱。
 
-### 加圖片
+### 2.3 資料格式（`content/*.json`）
 
-1. 把圖片放進 `src/assets/img/`，建議寬度 1600px 以內的 JPG。建置時會自動轉成 WebP 並產生多種尺寸。
-2. 在 JSON 裡用**檔名**引用，例如 `"file": "my_photo.jpg"`。
-3. 每張圖都要寫 `alt`（給看不到圖的人的描述）和 `caption`（圖說）。設 `"wide": true` 可以讓圖片佔兩欄。
+主要的 key：`meta`、`hero`、`education`、`experience`、`research`、`publications`、`awards`、`videos`、`activities`、`contact`、`ui`、`updated`。
 
-### 改完先檢查
+- 以 `_` 開頭的 key（例如 `_src`、`_note`）是給維護者看的出處註記，不會顯示在網站上。新增事實時請一併寫上 `_src`。
+- 只有 `hero.summary` 支援 `**粗體**`（經過 `rich()` 處理）；其他欄位寫 `**` 會原樣顯示。
+- 新增欄位要中英兩邊同時加。介面文字放在 `ui.labels`、`ui.sections`、`ui.nav`。
 
-```bash
-npm run check:content
+**`research[]`（研究與專案）一筆的格式：**
+
+```jsonc
+{
+  "id": "openarm-bimanual",          // 英文小寫加連字號，不可重複；同時是網址錨點 #openarm-bimanual
+  "category": "研究實習",             // 卡片右上角的標籤
+  "title": "…",
+  "org": "…",                        // 卡片上的金色一行（短）
+  "orgFull": "…",                    // 「詳細內容」裡的完整單位名稱
+  "period": "2026 年 7–8 月",         // 可省略
+  "summary": "…",                    // 卡片上的 1–2 句說明
+  "brief": "…",                      // 「我的角色」一句
+  "tags": ["Isaac Sim", "…"],
+  "thumb": "urop_thumb.jpg",         // 代表圖；有影片時當影片預覽圖
+  "thumbAlt": "…",                   // 代表圖的替代文字（必填）
+  "video": { "youtubeId": "BDO_n6OTzGI" },   // 可省略；ID 也要出現在 videos[]
+  "images": [                        // 卡片旁的小圖最多顯示 4 張（排除 thumb）；全部會出現在「詳細內容」
+    { "file": "urop_annotation.jpg", "caption": "…", "alt": "…", "wide": true }
+  ],
+  "overview": "…",                   // 以下都在「詳細內容」裡，都可省略
+  "method": ["…"], "system": "…", "design": ["…"], "contributions": ["…"],
+  "team": "…", "results": ["…"], "challenges": ["…"], "next": ["…"], "reflection": "…"
+}
 ```
 
-這支檢查會擋下下列問題，GitHub Actions 部署前也會自動執行：
-- 中英文結構不一致
-- 圖片找不到、圖片沒有 alt
-- YouTube ID 格式錯誤
-- 內容裡還有 `TODO`
-- 不小心放進成績、語言分數、學號、手機號碼
-- 中文裡出現對岸用語，例如「優化」「信息」「網絡」
+**`publications[]`**：`id`、`type`、`title`（可另加 `titleEn`）、`venue`、`status`、`statusKind`、`year`、`date`（可省略）、`abstract`、`note`（可省略）。
+- `statusKind` 決定狀態標籤的顏色：`review` 是黃色（審查中），`ok` 是藍色（已接受），`plain` 是無色。
 
-## 3. 重新部署
+**`experience[]`**：`role`、`org`、`place`、`period`、`items[]`、`link`（可省略，填專案的 `id`，會顯示「→ 專案介紹」）。
 
-改好之後 commit 並 push 到 `main`，GitHub Actions 會自動建置並部署，約 1～2 分鐘後網站就會更新。
+**`videos[]`**：`youtubeId`（11 個字元）、`title`、`caption`、`relatedProject`（專案的 `id`）。目前沒有獨立的影片區，影片只會嵌在專案卡片裡，播放器的標題取自這裡。
 
-```bash
-git add -A
-git commit -m "更新內容"
-git push origin main
-```
+### 2.4 常見任務的標準流程
 
-部署進度可以在 GitHub repo 的 **Actions** 分頁查看。失敗時點進去看紅色的步驟；最常見的原因是 `check:content` 擋下了內容問題，照錯誤訊息修改即可。
+#### A. 新增一個專案
 
-想在不改內容的情況下重新部署：到 **Actions → Deploy to GitHub Pages → Run workflow**。
+1. **先問本人**以下資訊，有原始資料（CV、簡報、論文）就請本人提供：
+   - 題目、時間、單位或指導老師
+   - 團隊人數，以及本人的角色
+   - 結果（要有具體數字或出處）
+   - 能公開的照片和影片
+   - 有沒有不能公開的部分
+2. 圖片處理：
+   - 用 PIL 縮到最寬 1600px，存成 JPG（品質約 85）。PIL 預設不會保留 EXIF，等於順便去除。
+   - 放進 `src/assets/img/`，檔名用英文，例如 `proj_xxx_1.jpg`。
+   - 不要用有其他人入鏡的照片、證明文件截圖，或引用他人論文的圖。
+3. 在 `content/zh.json` 和 `content/en.json` 的 `research[]` 加入同一筆資料，兩邊位置相同。陣列順序就是網頁上的顯示順序，最新、最重要的放前面。
+4. 有影片的話：在 `research[].video` 填 `youtubeId`，同時在 `videos[]` 加一筆，`relatedProject` 填這個專案的 `id`。
+5. 如果是實習或工作，視需要在 `experience[]` 加一筆，用 `link` 連到這個專案。
+6. 執行「2.5 驗證」。
 
-## 4. 改版面（需要一點程式基礎）
+#### B. 更新既有專案的進度
 
-| 檔案 | 用途 |
-|---|---|
-| `src/styles/global.css` | 所有樣式。配色都在檔案開頭的 `:root`（淺色）和深色模式的區塊；列印樣式在檔案最後 |
-| `src/pages/[lang]/index.astro` | 主頁面的結構 |
-| `src/layouts/Base.astro` | `<head>`：SEO、分享預覽、字型 |
-| `src/components/Video.astro` | YouTube 延遲載入：點了才從 youtube-nocookie.com 載入 |
-| `src/pages/index.astro` | 根網址的語言自動轉址 |
-| `public/og-zh.png`、`public/og-en.png` | 分享到社群時的預覽圖（1200×630） |
-| `astro.config.mjs` | 網址設定。會依 repo 名稱自動決定：名稱是 `tera0406.github.io` 時網址是 `https://tera0406.github.io/`；其他名稱則是 `https://tera0406.github.io/名稱/`。不用手動修改 |
+- **新結果**：加進 `results[]`，在 `_src` 註明出處。如果最重要的數字改變了，`summary` 也要一起更新。
+- **專案狀態改變**：例如計畫結案，就更新 `period` 和 `category`。
+- **新照片或影片**：照 A 的第 2、4 步處理。
+- **後續方向有進展**：把已完成的項目從 `next[]` 移到 `results[]`。
+- 中英兩邊都要改，並更新根層級的 `updated`（格式 `YYYY-MM`）。
 
-## 5. 隱私
+#### C. 論文狀態改變
 
-`.gitignore` 已經排除這些檔案：證明文件、推薦信、`*.odt`、個人資料表、成績單、原始的 pptx 和 docx。網站只使用整理過的 `content/*.json` 和 `src/assets/img/` 裡的圖片。
+- **被接受或刊出**：
+  - 改 `status`，例如「已接受 / Accepted」或「已刊出 / Published」。
+  - `statusKind` 改成 `ok`。
+  - 刊出後在 `venue` 加上卷期、頁碼和 DOI。
+  - 專案的 `results[]` 和 `summary` 裡提到論文狀態的句子也要一起改。
+- **想改放全文 PDF**：先跟本人確認期刊的分享政策，再把檔案放在 `public/papers/`，並在 JSON 加連結。目前的決定是不放。
+- **新論文**：加在 `publications[]` 最前面。
 
-新增檔案前，請先用 `git status` 確認沒有私人檔案被加進來。
+#### D. 其他
+
+- **新獎項**：`awards[]`，格式為 `title`、`org`、`year`、`note`。
+- **學歷變動**：例如畢業或開始交換，改 `education[]` 的 `badge`、`detail`。
+- **個人介紹**：`hero.summary`（兩三句）、`hero.role`、`hero.interests`（4 項以內）。
+- **聯絡方式**：`contact`。版面上的圖示順序在 `index.astro` 的 `links` 陣列。
+
+### 2.5 驗證（每次修改後都要做）
+
+1. `npm run check:content`：檢查中英結構一致、圖片存在、每張圖都有 alt 和 thumbAlt、YouTube ID 格式、沒有 TODO 和成績類字眼、沒有對岸用語。
+2. `npm run build`：必須成功。
+3. 用 Playwright 截圖檢查（Chromium 在 `/opt/pw-browsers`；`npx astro preview --port 4321` 可以啟動預覽）：
+   - 寬度：1440 和 390
+   - 模式：淺色和深色
+   - 語言：中英文都要看
+   - 確認沒有水平捲動
+   - 截圖拿給本人看
+4. 列印檢查：用 `page.pdf()` 輸出 A4，確認是白底黑字，大約兩頁。
+
+### 2.6 發佈流程
+
+1. 在工作分支上 commit。Commit 訊息不要提到模型名稱。
+2. 開 PR 到 `main`。
+3. **先讓本人看截圖並同意後再合併**；修 bug 這類本人明確要求的修正，可以直接合併。
+4. 合併後 GitHub Actions 會自動部署。要確認 `build` 和 `deploy` 兩個 job 都是 success。
+5. 雲端工作環境可能連不到 `github.io`。真的打不開時，請本人用瀏覽器確認，不要假裝已經看過。
+
+### 2.7 本人偏好的互動方式
+
+- 一律用繁體中文回覆。
+- 喜歡先看截圖，有選項時再討論。可以提供 2～3 個方向讓本人選，並附上建議。
+- 版面偏好：
+  - 左側個人欄，頭貼下方放圖示連結
+  - 右側用卡片呈現內容
+  - 標題用明體，內文用黑體，暖金色強調
+  - **不要**黑框或工程圖風格
+  - 字不要太大
+- 內容偏好：只放研究相關的重點，不放成績、技能清單這類一般個人網頁不會放的東西。
+
+### 2.8 已知待辦與想法
+
+- [ ] 英文版 CSMMT 會議名稱「National Conference on Mechanism and Machine Design」是暫譯，有官方英文名稱時要替換。
+- [ ] 翁愷貽老師的英文名「Kai-Yi Weng」是推測的拼法，本人已同意先這樣寫，有正式拼法時再改。
+- [ ] IEEE Access 論文審查結果出來後，照 2.4 C 更新。
+- [ ] 本人的公開 repo `tera0406/trash_bin` 可能是垃圾桶專案的程式碼。如果要在專案卡片加「程式碼」連結，先看過 repo 內容，並徵求本人同意。
+- [ ] 可以考慮加一份可下載的一頁式 CV（PDF），內容同樣不含成績等私人資料。
+
+---
+
+## 3. 隱私與安全
+
+- `.gitignore` 已經排除：證明文件、推薦信、`*.odt`、個人資料表、成績單、原始的 pptx 和 docx。
+- 新增檔案前先跑 `git status`，確認沒有私人檔案被加進來。
+- 刪掉的檔案仍然留在 git 歷史裡。萬一不小心 commit 了私人檔案，要先跟本人討論怎麼清除歷史，不能只是刪檔。
